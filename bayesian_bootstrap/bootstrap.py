@@ -1,26 +1,22 @@
 import numpy as np
 
-from tqdm import tqdm
-
-
-def bayesian_bootstrap_mean(X, n_replications):
+def mean(X, n_replications):
     samples = []
-    for _ in tqdm(range(n_replications)):
+    for _ in range(n_replications):
         weights = _bootstrap_replicate(X)
         samples.append(np.dot(X, weights))
     return samples
 
-
-def bayesian_bootstrap_var(X, n_replications):
+def var(X, n_replications):
     samples = []
-    for _ in tqdm(range(n_replications)):
+    for _ in range(n_replications):
         weights = _bootstrap_replicate(X)
         samples.append(np.dot([x ** 2 for x in X], weights) - np.dot(X, weights) ** 2)
     return samples
 
 def bayesian_bootstrap(X, statistic, n_replications, resample_size):
     samples = []
-    for _ in tqdm(range(n_replications)):
+    for _ in range(n_replications):
         weights = _bootstrap_replicate(X)
         resample_X = np.random.choice(X, p=weights, size=resample_size)
         s = statistic(resample_X)
