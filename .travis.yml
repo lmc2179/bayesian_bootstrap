@@ -7,3 +7,4 @@ python:
 before_install:
   - sudo apt-get -qq update
   - sudo apt-get install -y python-numpy
+script: "nosetests bayesian_bootstrap/tests"
