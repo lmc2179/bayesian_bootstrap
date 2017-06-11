@@ -23,6 +23,14 @@ def plot_mean_resample_bootstrap():
     sns.distplot(classical_samples)
     plt.show()
 
+def plot_median():
+    X = np.random.uniform(-1, 1, 10)
+    posterior_samples = bayesian_bootstrap(X, np.median, 10000, 100)
+    sns.distplot(posterior_samples)
+    classical_samples = [np.median(resample(X)) for _ in range(10000)]
+    sns.distplot(classical_samples)
+    plt.show()
+
 def plot_var_bootstrap():
     X = np.random.uniform(-1, 1, 100)
     posterior_samples = var(X, 10000)
@@ -67,7 +75,8 @@ def plot_regression_bootstrap():
 if __name__ == '__main__':
     # plot_mean_bootstrap()
     # plot_mean_resample_bootstrap()
+    plot_median()
     # plot_var_bootstrap()
     # plot_var_resample_bootstrap()
     # plot_mean_method_comparison()
-    plot_regression_bootstrap()
+    # plot_regression_bootstrap()
