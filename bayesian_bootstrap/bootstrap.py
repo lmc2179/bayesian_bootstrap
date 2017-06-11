@@ -23,6 +23,19 @@ def bayesian_bootstrap(X, statistic, n_replications, resample_size):
         samples.append(s)
     return samples
 
+def bayesian_bootstrap_regression(X, y, statistic, n_replications, resample_size):
+    samples = []
+    X_arr = np.array(X)
+    y_arr = np.array(y)
+    for _ in range(n_replications):
+        weights = _bootstrap_replicate(X_arr)
+        resample_i = np.random.choice(range(len(X_arr)), p=weights, size=resample_size)
+        resample_X = X_arr[resample_i]
+        resample_y = y_arr[resample_i]
+        s = statistic(resample_X, resample_y)
+        samples.append(s)
+    return samples
+
 def _bootstrap_replicate(X):
     random_points = [0] + sorted(np.random.uniform(0, 1, len(X) - 1)) + [1]
     gaps = [r - l for l, r in zip(random_points[:-1], random_points[1:])]

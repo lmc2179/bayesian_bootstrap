@@ -1,8 +1,10 @@
 from matplotlib import pyplot as plt
 import seaborn as sns
 from scipy.stats import norm
+from sklearn.linear_model import LinearRegression
 from sklearn.utils import resample
-from bayesian_bootstrap.bootstrap import mean, var, bayesian_bootstrap
+from bayesian_bootstrap.bootstrap import mean, var, bayesian_bootstrap, bayesian_bootstrap_regression
+from tqdm import tqdm
 import numpy as np
 
 def plot_mean_bootstrap():
@@ -47,9 +49,25 @@ def plot_mean_method_comparison():
     sns.distplot(posterior_samples_weighted)
     plt.show()
 
+def plot_regression_bootstrap():
+    X = np.array([[0], [1], [2], [3]])
+    y = np.array([0, 1, 2, 3]) + np.random.normal(0, 1, 4)
+    classical_samples = [LinearRegression().fit(*resample(X, y)).coef_ for _ in tqdm(range(10000))]
+    posterior_samples =     bayesian_bootstrap_regression(X,
+                                                          y,
+                                                          lambda X, y: LinearRegression().fit(X, y).coef_,
+                                                          10000,
+                                                          1000)
+    plt.scatter(X.reshape(-1, 1), y)
+    plt.show()
+    sns.distplot(classical_samples)
+    sns.distplot(posterior_samples)
+    plt.show()
+
 if __name__ == '__main__':
     # plot_mean_bootstrap()
     # plot_mean_resample_bootstrap()
     # plot_var_bootstrap()
     # plot_var_resample_bootstrap()
-    plot_mean_method_comparison()
+    # plot_mean_method_comparison()
+    plot_regression_bootstrap()
