@@ -46,7 +46,7 @@ def highest_density_interval(samples, alpha=0.05):
     window_size = len(samples) - round(len(samples)*alpha)
     smallest_window = (None, None)
     smallest_window_length = float('inf')
-    for i in range(len(samples_sorted) - window_size):
+    for i in range(int(len(samples_sorted)) - window_size):
         window = samples_sorted[i+window_size-1], samples_sorted[i]
         window_length = samples_sorted[i+window_size-1] - samples_sorted[i]
         if window_length < smallest_window_length:
