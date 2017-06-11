@@ -37,7 +37,7 @@ def bayesian_bootstrap_regression(X, y, statistic, n_replications, resample_size
     return samples
 
 def central_credible_interval(samples, alpha=0.05):
-    tail_size = round(len(samples)*(alpha/2))
+    tail_size = int(round(len(samples)*(alpha/2)))
     samples_sorted = sorted(samples)
     return samples_sorted[tail_size],samples_sorted[-tail_size-1]
 
