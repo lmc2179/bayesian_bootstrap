@@ -3,7 +3,7 @@ import seaborn as sns
 from scipy.stats import norm
 from sklearn.linear_model import LinearRegression
 from sklearn.utils import resample
-from bayesian_bootstrap.bootstrap import mean, var, bayesian_bootstrap, bayesian_bootstrap_regression
+from bayesian_bootstrap.bootstrap import mean, var, bayesian_bootstrap, bayesian_bootstrap_regression, BayesianBootstrapRegressor
 from tqdm import tqdm
 import numpy as np
 
@@ -72,11 +72,25 @@ def plot_regression_bootstrap():
     sns.distplot(posterior_samples)
     plt.show()
 
+def plot_regression_wrapper_bootstrap():
+    X = np.array([[0], [1], [2], [3]])
+    y = np.array([0, 1, 2, 3]) + np.random.normal(0, 1, 4)
+    m = BayesianBootstrapRegressor(LinearRegression(), 10000, 1000)
+    m.fit(X, y)
+    y_predicted = m.predict(X)
+    y_predicted_interval = m.predict_central_interval(X, 0.05)
+    plt.scatter(X.reshape(-1, 1), y)
+    plt.plot(X.reshape(-1, 1), y_predicted)
+    plt.plot(X.reshape(-1, 1), y_predicted_interval[:,0])
+    plt.plot(X.reshape(-1, 1), y_predicted_interval[:,1])
+    plt.show()
+
 if __name__ == '__main__':
     # plot_mean_bootstrap()
     # plot_mean_resample_bootstrap()
-    plot_median()
+    # plot_median()
     # plot_var_bootstrap()
     # plot_var_resample_bootstrap()
     # plot_mean_method_comparison()
     # plot_regression_bootstrap()
+    plot_regression_wrapper_bootstrap()

@@ -1,4 +1,5 @@
 import numpy as np
+from copy import deepcopy
 
 def mean(X, n_replications):
     samples = []
@@ -35,6 +36,45 @@ def bayesian_bootstrap_regression(X, y, statistic, n_replications, resample_size
         s = statistic(resample_X, resample_y)
         samples.append(s)
     return samples
+
+class AbstractBayesianBootstrapBagging(object):
+    def __init__(self, base_learner, n_replications, resample_size):
+        self.base_learner = base_learner
+        self.n_replications = n_replications
+        self.resample_size = resample_size
+
+    def fit(self, X, y):
+        self.base_models_ = bayesian_bootstrap_regression(X,
+                                                          y,
+                                                          lambda X, y: deepcopy(self.base_learner).fit(X, y),
+                                                          self.n_replications,
+                                                          self.resample_size)
+        return self
+
+    def predict(self, X):
+        y_posterior_samples = self.predict_posterior_samples(X)
+        return np.array([np.mean(r) for r in y_posterior_samples])
+
+    def predict_posterior_samples(self, X):
+        # Return a X_r x self.n_replications matrix
+        y_posterior_samples = np.zeros((len(X), self.n_replications))
+        for i, m in enumerate(self.base_models_):
+            y_posterior_samples[:,i] = m.predict(X)
+        return y_posterior_samples
+
+    def predict_central_interval(self, X, alpha=0.05):
+        y_posterior_samples = self.predict_posterior_samples(X)
+        return np.array([central_credible_interval(r, alpha=alpha) for r in y_posterior_samples])
+
+    def predict_highest_density_interval(self, X, alpha=0.05):
+        y_posterior_samples = self.predict_posterior_samples(X)
+        return np.array([highest_density_interval(r, alpha=alpha) for r in y_posterior_samples])
+
+class BayesianBootstrapRegressor(AbstractBayesianBootstrapBagging):
+    pass
+
+class BayesianBootstrapClassifier(AbstractBayesianBootstrapBagging):
+    pass
 
 def central_credible_interval(samples, alpha=0.05):
     tail_size = int(round(len(samples)*(alpha/2)))
