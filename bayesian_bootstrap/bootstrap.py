@@ -37,7 +37,7 @@ def bayesian_bootstrap_regression(X, y, statistic, n_replications, resample_size
         samples.append(s)
     return samples
 
-class AbstractBayesianBootstrapBagging(object):
+class BayesianBootstrapBagging(object):
     def __init__(self, base_learner, n_replications, resample_size):
         self.base_learner = base_learner
         self.n_replications = n_replications
@@ -70,11 +70,7 @@ class AbstractBayesianBootstrapBagging(object):
         y_posterior_samples = self.predict_posterior_samples(X)
         return np.array([highest_density_interval(r, alpha=alpha) for r in y_posterior_samples])
 
-class BayesianBootstrapRegressor(AbstractBayesianBootstrapBagging):
-    pass
-
-class BayesianBootstrapClassifier(AbstractBayesianBootstrapBagging):
-    pass
+# TODO: Add
 
 def central_credible_interval(samples, alpha=0.05):
     tail_size = int(round(len(samples)*(alpha/2)))

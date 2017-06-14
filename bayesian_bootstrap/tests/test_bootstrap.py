@@ -2,7 +2,8 @@ import unittest
 import numpy as np
 import random
 from bayesian_bootstrap.bootstrap import mean, var, bayesian_bootstrap, central_credible_interval, \
-    highest_density_interval
+    highest_density_interval, BayesianBootstrapBagging
+from sklearn.linear_model import LinearRegression
 
 class TestMoments(unittest.TestCase):
     def test_mean(self):
@@ -51,3 +52,27 @@ class TestIntervals(unittest.TestCase):
         x = list(x)
         random.shuffle(x)
         return x
+
+class TestRegression(unittest.TestCase):
+    def test_parameter_estimation(self):
+        X = np.random.uniform(0, 4, 1000)
+        y = X + np.random.normal(0, 1, 1000)
+        m = BayesianBootstrapBagging(LinearRegression(), 10000, 1000)
+        m.fit(X.reshape(-1, 1), y)
+        coef_samples = [m.coef_ for m in m.base_models_]
+        intercept_samples = [m.intercept_ for m in m.base_models_]
+        self.assertAlmostEqual(np.mean(coef_samples), 1, delta=0.3)
+        l, r = central_credible_interval(coef_samples, alpha=0.05)
+        self.assertLess(l, 1)
+        self.assertGreater(r, 1)
+        l, r = highest_density_interval(coef_samples, alpha=0.05)
+        self.assertLess(l, 1)
+        self.assertGreater(r, 1)
+        self.assertAlmostEqual(np.mean(intercept_samples), 0, delta=0.3)
+        l, r = central_credible_interval(intercept_samples, alpha=0.05)
+        self.assertLess(l, 0)
+        self.assertGreater(r, 0)
+        self.assertAlmostEqual(np.mean(intercept_samples), 0, delta=0.3)
+        l, r = highest_density_interval(intercept_samples, alpha=0.05)
+        self.assertLess(l, 0)
+        self.assertGreater(r, 0)
