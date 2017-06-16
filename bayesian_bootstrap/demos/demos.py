@@ -3,7 +3,8 @@ import seaborn as sns
 from scipy.stats import norm
 from sklearn.linear_model import LinearRegression
 from sklearn.utils import resample
-from bayesian_bootstrap.bootstrap import mean, var, bayesian_bootstrap, bayesian_bootstrap_regression, BayesianBootstrapRegressor
+from bayesian_bootstrap.bootstrap import mean, var, bayesian_bootstrap, bayesian_bootstrap_regression, \
+    BayesianBootstrapBagging, highest_density_interval
 from tqdm import tqdm
 import numpy as np
 
@@ -75,7 +76,7 @@ def plot_regression_bootstrap():
 def plot_regression_wrapper_bootstrap():
     X = np.array([[0], [1], [2], [3]])
     y = np.array([0, 1, 2, 3]) + np.random.normal(0, 1, 4)
-    m = BayesianBootstrapRegressor(LinearRegression(), 10000, 1000)
+    m = BayesianBootstrapBagging(LinearRegression(), 10000, 1000)
     m.fit(X, y)
     y_predicted = m.predict(X)
     y_predicted_interval = m.predict_central_interval(X, 0.05)
@@ -85,6 +86,18 @@ def plot_regression_wrapper_bootstrap():
     plt.plot(X.reshape(-1, 1), y_predicted_interval[:,1])
     plt.show()
 
+def plot_mean_bootstrap_exponential_readme():
+    X = np.random.exponential(5, 8)
+    posterior_samples = mean(X, 10000)
+    l, r = highest_density_interval(posterior_samples)
+    sns.distplot(posterior_samples, label='Bayesian Bootstrap Samples')
+    plt.plot([l, r], [0, 0], linewidth=5.0, marker='o', label='95% HDI')
+    plt.legend()
+    plt.show()
+
+def plot_regression_slope_distribution_readme():
+    pass
+
 if __name__ == '__main__':
     # plot_mean_bootstrap()
     # plot_mean_resample_bootstrap()
@@ -93,4 +106,5 @@ if __name__ == '__main__':
     # plot_var_resample_bootstrap()
     # plot_mean_method_comparison()
     # plot_regression_bootstrap()
-    plot_regression_wrapper_bootstrap()
+    # plot_regression_wrapper_bootstrap()
+    plot_mean_bootstrap_exponential()
