@@ -7,5 +7,5 @@ python:
 before_install:
   - sudo apt-get -qq update
   - sudo apt-get install -y python-numpy
-  - sudo pip install scikit-learn
+  - sudo apt-get install -y python-sklearn
 script: "nosetests bayesian_bootstrap/tests"
