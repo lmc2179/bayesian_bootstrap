@@ -1,9 +1,10 @@
 language: python
 python:
-  # We don't actually use the Travis Python, but this keeps it organized.
   - "2.7"
   - "3.3"
   - "3.4"
+virtualenv:
+  system_site_packages: true
 before_install:
   - sudo apt-get -qq update
   - sudo apt-get install -y python-numpy
