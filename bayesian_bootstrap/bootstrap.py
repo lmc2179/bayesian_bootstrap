@@ -2,6 +2,12 @@ import numpy as np
 from copy import deepcopy
 
 def mean(X, n_replications):
+    """Simulate the posterior distribution of the mean.
+
+    :param X: The observed data (array like)
+    :param n_replications: The number of bootstrap replications to perform (positive integer)
+    :return: Samples from the posterior
+    """
     samples = []
     for _ in range(n_replications):
         weights = _bootstrap_replicate(X)
@@ -9,6 +15,12 @@ def mean(X, n_replications):
     return samples
 
 def var(X, n_replications):
+    """Simulate the posterior distribution of the variance.
+
+    :param X: The observed data (array like)
+    :param n_replications: The number of bootstrap replications to perform (positive integer)
+    :return: Samples from the posterior
+    """
     samples = []
     for _ in range(n_replications):
         weights = _bootstrap_replicate(X)
@@ -16,6 +28,14 @@ def var(X, n_replications):
     return samples
 
 def bayesian_bootstrap(X, statistic, n_replications, resample_size):
+    """Simulate the posterior distribution of the given statistic.
+
+    :param X: The observed data (array like)
+    :param statistic: A function of the data to use in simulation (Function mapping array-like to number)
+    :param n_replications: The number of bootstrap replications to perform (positive integer)
+    :param resample_size: The size of the dataset in each replication
+    :return: Samples from the posterior
+    """
     samples = []
     for _ in range(n_replications):
         weights = _bootstrap_replicate(X)
@@ -25,6 +45,15 @@ def bayesian_bootstrap(X, statistic, n_replications, resample_size):
     return samples
 
 def bayesian_bootstrap_regression(X, y, statistic, n_replications, resample_size):
+    """Simulate the posterior distribution of a statistic that uses dependent and independent variables.
+
+    :param X: The observed data, independent variables (matrix like)
+    :param y: The observed data, dependent variable (array like)
+    :param statistic: A function of the data to use in simulation (Function mapping array-like to number)
+    :param n_replications: The number of bootstrap replications to perform (positive integer)
+    :param resample_size: The size of the dataset in each replication
+    :return: Samples from the posterior
+    """
     samples = []
     X_arr = np.array(X)
     y_arr = np.array(y)
@@ -38,12 +67,25 @@ def bayesian_bootstrap_regression(X, y, statistic, n_replications, resample_size
     return samples
 
 class BayesianBootstrapBagging(object):
+    """A bootstrap aggregating model using the bayesian bootstrap. Similar to scikit-learn's BaggingRegressor."""
     def __init__(self, base_learner, n_replications, resample_size):
+        """Initialize the base learners of the ensemble.
+
+        :param base_learner: A scikit-learn like estimator.
+        :param n_replications: The number of bootstrap replications to perform (positive integer)
+        :param resample_size: The size of the dataset in each replication
+        """
         self.base_learner = base_learner
         self.n_replications = n_replications
         self.resample_size = resample_size
 
     def fit(self, X, y):
+        """Fit the base learners of the ensemble on a dataset.
+
+        :param X: The observed data, independent variables (matrix like)
+        :param y: The observed data, dependent variable (array like)
+        :return: Fitted model
+        """
         self.base_models_ = bayesian_bootstrap_regression(X,
                                                           y,
                                                           lambda X, y: deepcopy(self.base_learner).fit(X, y),
@@ -52,10 +94,20 @@ class BayesianBootstrapBagging(object):
         return self
 
     def predict(self, X):
+        """Make average predictions for a collection of observations.
+
+        :param X: The observed data, independent variables (matrix like)
+        :return: The predicted dependent variable values (array like)
+        """
         y_posterior_samples = self.predict_posterior_samples(X)
         return np.array([np.mean(r) for r in y_posterior_samples])
 
     def predict_posterior_samples(self, X):
+        """Simulate posterior samples for a collection of observations.
+
+        :param X: The observed data, independent variables (matrix like)
+        :return: The simulated posterior mean (matrix like)
+        """
         # Return a X_r x self.n_replications matrix
         y_posterior_samples = np.zeros((len(X), self.n_replications))
         for i, m in enumerate(self.base_models_):
@@ -63,21 +115,43 @@ class BayesianBootstrapBagging(object):
         return y_posterior_samples
 
     def predict_central_interval(self, X, alpha=0.05):
+        """The equal-tailed interval prediction containing a (1-alpha) fraction of the posterior samples.
+
+        :param X: The observed data, independent variables (matrix like)
+        :param alpha: The total size of the tails (Float between 0 and 1)
+        :return: Left and right interval bounds for each input (matrix like)
+        """
         y_posterior_samples = self.predict_posterior_samples(X)
         return np.array([central_credible_interval(r, alpha=alpha) for r in y_posterior_samples])
 
     def predict_highest_density_interval(self, X, alpha=0.05):
+        """The highest density interval prediction containing a (1-alpha) fraction of the posterior samples.
+
+        :param X: The observed data, independent variables (matrix like)
+        :param alpha: The total size of the tails (Float between 0 and 1)
+        :return: Left and right interval bounds for each input (matrix like):
+        """
         y_posterior_samples = self.predict_posterior_samples(X)
         return np.array([highest_density_interval(r, alpha=alpha) for r in y_posterior_samples])
 
-# TODO: Add
-
 def central_credible_interval(samples, alpha=0.05):
+    """The equal-tailed interval containing a (1-alpha) fraction of the posterior samples.
+
+    :param samples: The posterior samples (array like)
+    :param alpha: The total size of the tails (Float between 0 and 1)
+    :return: Left and right interval bounds (tuple)
+    """
     tail_size = int(round(len(samples)*(alpha/2)))
     samples_sorted = sorted(samples)
     return samples_sorted[tail_size],samples_sorted[-tail_size-1]
 
 def highest_density_interval(samples, alpha=0.05):
+    """The highest-density interval containing a (1-alpha) fraction of the posterior samples.
+
+    :param samples: The posterior samples (array like)
+    :param alpha: The total size of the tails (Float between 0 and 1)
+    :return: Left and right interval bounds (tuple)
+    """
     samples_sorted = sorted(samples)
     window_size = int(len(samples) - round(len(samples)*alpha))
     smallest_window = (None, None)
