@@ -59,8 +59,8 @@ class TestRegression(unittest.TestCase):
         y = X + np.random.normal(0, 1, 1000)
         m = BayesianBootstrapBagging(LinearRegression(), 10000, 1000)
         m.fit(X.reshape(-1, 1), y)
-        coef_samples = [m.coef_ for m in m.base_models_]
-        intercept_samples = [m.intercept_ for m in m.base_models_]
+        coef_samples = [b.coef_ for b in m.base_models_]
+        intercept_samples = [b.intercept_ for b in m.base_models_]
         self.assertAlmostEqual(np.mean(coef_samples), 1, delta=0.3)
         l, r = central_credible_interval(coef_samples, alpha=0.05)
         self.assertLess(l, 1)
