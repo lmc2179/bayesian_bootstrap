@@ -87,13 +87,24 @@ def plot_regression_wrapper_bootstrap():
     plt.show()
 
 def plot_mean_bootstrap_exponential_readme():
-    X = np.random.exponential(5, 8)
+    X = np.random.exponential(7, 4)
+    classical_samples = [np.mean(resample(X)) for _ in range(10000)]
     posterior_samples = mean(X, 10000)
     l, r = highest_density_interval(posterior_samples)
+    classical_l, classical_r = highest_density_interval(classical_samples)
+    plt.subplot(2, 1, 1)
+    plt.title('Bayesian Bootstrap of mean')
     sns.distplot(posterior_samples, label='Bayesian Bootstrap Samples')
     plt.plot([l, r], [0, 0], linewidth=5.0, marker='o', label='95% HDI')
+    plt.xlim(-1, 18)
     plt.legend()
-    plt.show()
+    plt.subplot(2, 1, 2)
+    plt.title('Classical Bootstrap of mean')
+    sns.distplot(classical_samples, label='Classical Bootstrap Samples')
+    plt.plot([classical_l, classical_r], [0, 0], linewidth=5.0, marker='o', label='95% HDI')
+    plt.xlim(-1, 18)
+    plt.legend()
+    plt.savefig('readme_exponential.png', bbox_inches='tight')
 
 def plot_regression_slope_distribution_readme():
     pass
@@ -107,4 +118,4 @@ if __name__ == '__main__':
     # plot_mean_method_comparison()
     # plot_regression_bootstrap()
     # plot_regression_wrapper_bootstrap()
-    plot_mean_bootstrap_exponential()
+    plot_mean_bootstrap_exponential_readme()

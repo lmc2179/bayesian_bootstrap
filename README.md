@@ -4,7 +4,24 @@
 
 # Example: Estimating the mean
 
+Problem setup
+
+Draw data points
+
+Show posterior samples: Code, plot from plot_mean_bootstrap_exponential_readme()
+![Posterior](demos/readme_exponential.png)
+
 # Example: Regression modelling
+
+Problem setup
+
+Sample data points
+
+Show scatterplot + code
+
+Show posterior samples for slope
+
+Show show scatterplot with prediction bands
 
 # Further reading
 
