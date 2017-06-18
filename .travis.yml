@@ -3,9 +3,15 @@ python:
   - "2.7"
   - "3.3"
   - "3.4"
-virtualenv:
-  system_site_packages: true
+addons:
+  apt:
+    packages:
+    - libblas-dev
+    - liblapack-dev
+    - gfortran
+    - graphviz
 before_install:
-  - sudo apt-get -qq update
-  - sudo apt-get install -qq python-numpy python-scipy
-script: "nosetests bayesian_bootstrap/tests"
+  - pip install -U pip setuptools wheel
+install:
+  - travis_wait travis_retry pip install -r requirements.txt
+  - travis_retry python setup.py devscript: "nosetests bayesian_bootstrap/tests"
