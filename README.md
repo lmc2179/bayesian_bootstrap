@@ -4,11 +4,19 @@
 
 # Example: Estimating the mean
 
-Problem setup
+```
+X = np.random.exponential(7, 4)
+```
+```
+from bayesian_bootstrap.bootstrap import mean
+posterior_samples = mean(X, 10000)
+l, r = highest_density_interval(posterior_samples)
 
-Draw data points
+plt.title('Bayesian Bootstrap of mean')
+sns.distplot(posterior_samples, label='Bayesian Bootstrap Samples')
+plt.plot([l, r], [0, 0], linewidth=5.0, marker='o', label='95% HDI')
+```
 
-Show posterior samples: Code, plot from plot_mean_bootstrap_exponential_readme()
 ![Posterior](bayesian_bootstrap/demos/readme_exponential.png)
 
 # Example: Regression modelling
