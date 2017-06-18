@@ -107,7 +107,19 @@ def plot_mean_bootstrap_exponential_readme():
     plt.savefig('readme_exponential.png', bbox_inches='tight')
 
 def plot_regression_slope_distribution_readme():
-    pass
+    X = np.random.normal(0, 1, 5).reshape(-1, 1)
+    y = X.reshape(1, -1).reshape(5) + np.random.normal(0, 1, 5)
+    m = BayesianBootstrapBagging(LinearRegression(), 10000, 1000)
+    m.fit(X, y)
+    X_plot = np.linspace(min(X), max(X))
+    y_predicted = m.predict(X_plot.reshape(-1, 1))
+    y_predicted_interval = m.predict_highest_density_interval(X_plot.reshape(-1, 1), 0.05)
+    plt.scatter(X.reshape(1, -1), y)
+    plt.plot(X_plot, y_predicted, label='Mean')
+    plt.plot(X_plot, y_predicted_interval[:,0], label='95% HDI Lower bound')
+    plt.plot(X_plot, y_predicted_interval[:,1], label='95% HDI Upper bound')
+    plt.legend()
+    plt.savefig('readme_regression.png', bbox_inches='tight')
 
 if __name__ == '__main__':
     # plot_mean_bootstrap()
@@ -118,4 +130,5 @@ if __name__ == '__main__':
     # plot_mean_method_comparison()
     # plot_regression_bootstrap()
     # plot_regression_wrapper_bootstrap()
-    plot_mean_bootstrap_exponential_readme()
+    # plot_mean_bootstrap_exponential_readme()
+    plot_regression_slope_distribution_readme()

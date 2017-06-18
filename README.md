@@ -31,6 +31,10 @@ Show posterior samples for slope
 
 Show show scatterplot with prediction bands
 
+![Posterior](bayesian_bootstrap/demos/readme_regression.png)
+
+
 # Further reading
 
 https://projecteuclid.org/euclid.aos/1176345338
+http://notstatschat.tumblr.com/post/156650638586/when-the-bootstrap-doesnt-work
