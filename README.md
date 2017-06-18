@@ -9,7 +9,7 @@ Problem setup
 Draw data points
 
 Show posterior samples: Code, plot from plot_mean_bootstrap_exponential_readme()
-![Posterior](demos/readme_exponential.png)
+![Posterior](bayesian_bootstrap/demos/readme_exponential.png)
 
 # Example: Regression modelling
 
