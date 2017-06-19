@@ -56,10 +56,15 @@ def bayesian_bootstrap_regression(X, y, statistic, n_replications, resample_size
     """Simulate the posterior distribution of a statistic that uses dependent and independent variables.
 
     Parameter X: The observed data, independent variables (matrix like)
+
     Parameter y: The observed data, dependent variable (array like)
+
     Parameter statistic: A function of the data to use in simulation (Function mapping array-like to number)
+
     Parameter n_replications: The number of bootstrap replications to perform (positive integer)
+
     Parameter resample_size: The size of the dataset in each replication
+
     Returns: Samples from the posterior
     """
     samples = []
@@ -80,7 +85,9 @@ class BayesianBootstrapBagging(object):
         """Initialize the base learners of the ensemble.
 
         Parameter base_learner: A scikit-learn like estimator.
+
         Parameter n_replications: The number of bootstrap replications to perform (positive integer)
+
         Parameter resample_size: The size of the dataset in each replication
         """
         self.base_learner = base_learner
@@ -91,7 +98,9 @@ class BayesianBootstrapBagging(object):
         """Fit the base learners of the ensemble on a dataset.
 
         Parameter X: The observed data, independent variables (matrix like)
+
         Parameter y: The observed data, dependent variable (array like)
+
         Returns: Fitted model
         """
         self.base_models_ = bayesian_bootstrap_regression(X,
@@ -105,6 +114,7 @@ class BayesianBootstrapBagging(object):
         """Make average predictions for a collection of observations.
 
         Parameter X: The observed data, independent variables (matrix like)
+
         Returns: The predicted dependent variable values (array like)
         """
         y_posterior_samples = self.predict_posterior_samples(X)
@@ -114,6 +124,7 @@ class BayesianBootstrapBagging(object):
         """Simulate posterior samples for a collection of observations.
 
         Parameter X: The observed data, independent variables (matrix like)
+
         Returns: The simulated posterior mean (matrix like)
         """
         # Return a X_r x self.n_replications matrix
@@ -126,7 +137,9 @@ class BayesianBootstrapBagging(object):
         """The equal-tailed interval prediction containing a (1-alpha) fraction of the posterior samples.
 
         Parameter X: The observed data, independent variables (matrix like)
+
         Parameter alpha: The total size of the tails (Float between 0 and 1)
+
         Returns: Left and right interval bounds for each input (matrix like)
         """
         y_posterior_samples = self.predict_posterior_samples(X)
@@ -136,7 +149,9 @@ class BayesianBootstrapBagging(object):
         """The highest density interval prediction containing a (1-alpha) fraction of the posterior samples.
 
         Parameter X: The observed data, independent variables (matrix like)
+
         Parameter alpha: The total size of the tails (Float between 0 and 1)
+
         Returns: Left and right interval bounds for each input (matrix like):
         """
         y_posterior_samples = self.predict_posterior_samples(X)
@@ -146,7 +161,9 @@ def central_credible_interval(samples, alpha=0.05):
     """The equal-tailed interval containing a (1-alpha) fraction of the posterior samples.
 
     Parameter samples: The posterior samples (array like)
+
     Parameter alpha: The total size of the tails (Float between 0 and 1)
+
     Returns: Left and right interval bounds (tuple)
     """
     tail_size = int(round(len(samples)*(alpha/2)))
@@ -157,7 +174,9 @@ def highest_density_interval(samples, alpha=0.05):
     """The highest-density interval containing a (1-alpha) fraction of the posterior samples.
 
     Parameter samples: The posterior samples (array like)
+
     Parameter alpha: The total size of the tails (Float between 0 and 1)
+
     Returns: Left and right interval bounds (tuple)
     """
     samples_sorted = sorted(samples)
