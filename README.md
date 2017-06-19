@@ -22,7 +22,7 @@ plt.plot([l, r], [0, 0], linewidth=5.0, marker='o', label='95% HDI')
 ![Posterior](bayesian_bootstrap/demos/readme_exponential.png)
 
 # Example: Regression modelling
-
+<!--
 Problem setup
 
 Sample data points
@@ -32,7 +32,27 @@ Show scatterplot + code
 Show posterior samples for slope
 
 Show show scatterplot with prediction bands
+-->
+```
+X = np.random.normal(0, 1, 5).reshape(-1, 1)
+y = X.reshape(1, -1).reshape(5) + np.random.normal(0, 1, 5)
+```
+```
+m = BayesianBootstrapBagging(LinearRegression(), 10000, 1000)
+m.fit(X, y)
+```
+```
+X_plot = np.linspace(min(X), max(X))
+y_predicted = m.predict(X_plot.reshape(-1, 1))
+y_predicted_interval = m.predict_highest_density_interval(X_plot.reshape(-1, 1), 0.05)
 
+plt.scatter(X.reshape(1, -1), y)
+plt.plot(X_plot, y_predicted, label='Mean')
+plt.plot(X_plot, y_predicted_interval[:,0], label='95% HDI Lower bound')
+plt.plot(X_plot, y_predicted_interval[:,1], label='95% HDI Upper bound')
+plt.legend()
+plt.savefig('readme_regression.png', bbox_inches='tight')
+```
 ![Posterior](bayesian_bootstrap/demos/readme_regression.png)
 
 
