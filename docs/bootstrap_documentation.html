@@ -1091,9 +1091,11 @@ table {
 <span class="k">def</span> <span class="nf">mean</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">n_replications</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Simulate the posterior distribution of the mean.</span>
 
-<span class="sd">    :param X: The observed data (array like)</span>
-<span class="sd">    :param n_replications: The number of bootstrap replications to perform (positive integer)</span>
-<span class="sd">    :return: Samples from the posterior</span>
+<span class="sd">    Parameter X: The observed data (array like)</span>
+
+<span class="sd">    Parameter n_replications: The number of bootstrap replications to perform (positive integer)</span>
+
+<span class="sd">    Returns: Samples from the posterior</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">samples</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_replications</span><span class="p">):</span>
@@ -1104,9 +1106,11 @@ table {
 <span class="k">def</span> <span class="nf">var</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">n_replications</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Simulate the posterior distribution of the variance.</span>
 
-<span class="sd">    :param X: The observed data (array like)</span>
-<span class="sd">    :param n_replications: The number of bootstrap replications to perform (positive integer)</span>
-<span class="sd">    :return: Samples from the posterior</span>
+<span class="sd">    Parameter X: The observed data (array like)</span>
+
+<span class="sd">    Parameter n_replications: The number of bootstrap replications to perform (positive integer)</span>
+
+<span class="sd">    Returns: Samples from the posterior</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">samples</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_replications</span><span class="p">):</span>
@@ -1117,11 +1121,15 @@ table {
 <span class="k">def</span> <span class="nf">bayesian_bootstrap</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">statistic</span><span class="p">,</span> <span class="n">n_replications</span><span class="p">,</span> <span class="n">resample_size</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Simulate the posterior distribution of the given statistic.</span>
 
-<span class="sd">    :param X: The observed data (array like)</span>
-<span class="sd">    :param statistic: A function of the data to use in simulation (Function mapping array-like to number)</span>
-<span class="sd">    :param n_replications: The number of bootstrap replications to perform (positive integer)</span>
-<span class="sd">    :param resample_size: The size of the dataset in each replication</span>
-<span class="sd">    :return: Samples from the posterior</span>
+<span class="sd">    Parameter X: The observed data (array like)</span>
+
+<span class="sd">    Parameter statistic: A function of the data to use in simulation (Function mapping array-like to number)</span>
+
+<span class="sd">    Parameter n_replications: The number of bootstrap replications to perform (positive integer)</span>
+
+<span class="sd">    Parameter resample_size: The size of the dataset in each replication</span>
+
+<span class="sd">    Returns: Samples from the posterior</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">samples</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_replications</span><span class="p">):</span>
@@ -1134,12 +1142,12 @@ table {
 <span class="k">def</span> <span class="nf">bayesian_bootstrap_regression</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">statistic</span><span class="p">,</span> <span class="n">n_replications</span><span class="p">,</span> <span class="n">resample_size</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Simulate the posterior distribution of a statistic that uses dependent and independent variables.</span>
 
-<span class="sd">    :param X: The observed data, independent variables (matrix like)</span>
-<span class="sd">    :param y: The observed data, dependent variable (array like)</span>
-<span class="sd">    :param statistic: A function of the data to use in simulation (Function mapping array-like to number)</span>
-<span class="sd">    :param n_replications: The number of bootstrap replications to perform (positive integer)</span>
-<span class="sd">    :param resample_size: The size of the dataset in each replication</span>
-<span class="sd">    :return: Samples from the posterior</span>
+<span class="sd">    Parameter X: The observed data, independent variables (matrix like)</span>
+<span class="sd">    Parameter y: The observed data, dependent variable (array like)</span>
+<span class="sd">    Parameter statistic: A function of the data to use in simulation (Function mapping array-like to number)</span>
+<span class="sd">    Parameter n_replications: The number of bootstrap replications to perform (positive integer)</span>
+<span class="sd">    Parameter resample_size: The size of the dataset in each replication</span>
+<span class="sd">    Returns: Samples from the posterior</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">samples</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">X_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
@@ -1158,9 +1166,9 @@ table {
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_learner</span><span class="p">,</span> <span class="n">n_replications</span><span class="p">,</span> <span class="n">resample_size</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialize the base learners of the ensemble.</span>
 
-<span class="sd">        :param base_learner: A scikit-learn like estimator.</span>
-<span class="sd">        :param n_replications: The number of bootstrap replications to perform (positive integer)</span>
-<span class="sd">        :param resample_size: The size of the dataset in each replication</span>
+<span class="sd">        Parameter base_learner: A scikit-learn like estimator.</span>
+<span class="sd">        Parameter n_replications: The number of bootstrap replications to perform (positive integer)</span>
+<span class="sd">        Parameter resample_size: The size of the dataset in each replication</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">base_learner</span> <span class="o">=</span> <span class="n">base_learner</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_replications</span> <span class="o">=</span> <span class="n">n_replications</span>
@@ -1169,9 +1177,9 @@ table {
     <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Fit the base learners of the ensemble on a dataset.</span>
 
-<span class="sd">        :param X: The observed data, independent variables (matrix like)</span>
-<span class="sd">        :param y: The observed data, dependent variable (array like)</span>
-<span class="sd">        :return: Fitted model</span>
+<span class="sd">        Parameter X: The observed data, independent variables (matrix like)</span>
+<span class="sd">        Parameter y: The observed data, dependent variable (array like)</span>
+<span class="sd">        Returns: Fitted model</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">base_models_</span> <span class="o">=</span> <span class="n">bayesian_bootstrap_regression</span><span class="p">(</span><span class="n">X</span><span class="p">,</span>
                                                           <span class="n">y</span><span class="p">,</span>
@@ -1183,8 +1191,8 @@ table {
     <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Make average predictions for a collection of observations.</span>
 
-<span class="sd">        :param X: The observed data, independent variables (matrix like)</span>
-<span class="sd">        :return: The predicted dependent variable values (array like)</span>
+<span class="sd">        Parameter X: The observed data, independent variables (matrix like)</span>
+<span class="sd">        Returns: The predicted dependent variable values (array like)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">y_posterior_samples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_posterior_samples</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">y_posterior_samples</span><span class="p">])</span>
@@ -1192,8 +1200,8 @@ table {
     <span class="k">def</span> <span class="nf">predict_posterior_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Simulate posterior samples for a collection of observations.</span>
 
-<span class="sd">        :param X: The observed data, independent variables (matrix like)</span>
-<span class="sd">        :return: The simulated posterior mean (matrix like)</span>
+<span class="sd">        Parameter X: The observed data, independent variables (matrix like)</span>
+<span class="sd">        Returns: The simulated posterior mean (matrix like)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Return a X_r x self.n_replications matrix</span>
         <span class="n">y_posterior_samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_replications</span><span class="p">))</span>
@@ -1204,9 +1212,9 @@ table {
     <span class="k">def</span> <span class="nf">predict_central_interval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The equal-tailed interval prediction containing a (1-alpha) fraction of the posterior samples.</span>
 
-<span class="sd">        :param X: The observed data, independent variables (matrix like)</span>
-<span class="sd">        :param alpha: The total size of the tails (Float between 0 and 1)</span>
-<span class="sd">        :return: Left and right interval bounds for each input (matrix like)</span>
+<span class="sd">        Parameter X: The observed data, independent variables (matrix like)</span>
+<span class="sd">        Parameter alpha: The total size of the tails (Float between 0 and 1)</span>
+<span class="sd">        Returns: Left and right interval bounds for each input (matrix like)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">y_posterior_samples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_posterior_samples</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">central_credible_interval</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">y_posterior_samples</span><span class="p">])</span>
@@ -1214,9 +1222,9 @@ table {
     <span class="k">def</span> <span class="nf">predict_highest_density_interval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The highest density interval prediction containing a (1-alpha) fraction of the posterior samples.</span>
 
-<span class="sd">        :param X: The observed data, independent variables (matrix like)</span>
-<span class="sd">        :param alpha: The total size of the tails (Float between 0 and 1)</span>
-<span class="sd">        :return: Left and right interval bounds for each input (matrix like):</span>
+<span class="sd">        Parameter X: The observed data, independent variables (matrix like)</span>
+<span class="sd">        Parameter alpha: The total size of the tails (Float between 0 and 1)</span>
+<span class="sd">        Returns: Left and right interval bounds for each input (matrix like):</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">y_posterior_samples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_posterior_samples</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">highest_density_interval</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">y_posterior_samples</span><span class="p">])</span>
@@ -1224,9 +1232,9 @@ table {
 <span class="k">def</span> <span class="nf">central_credible_interval</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;The equal-tailed interval containing a (1-alpha) fraction of the posterior samples.</span>
 
-<span class="sd">    :param samples: The posterior samples (array like)</span>
-<span class="sd">    :param alpha: The total size of the tails (Float between 0 and 1)</span>
-<span class="sd">    :return: Left and right interval bounds (tuple)</span>
+<span class="sd">    Parameter samples: The posterior samples (array like)</span>
+<span class="sd">    Parameter alpha: The total size of the tails (Float between 0 and 1)</span>
+<span class="sd">    Returns: Left and right interval bounds (tuple)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">tail_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">alpha</span><span class="o">/</span><span class="mi">2</span><span class="p">)))</span>
     <span class="n">samples_sorted</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
@@ -1235,9 +1243,9 @@ table {
 <span class="k">def</span> <span class="nf">highest_density_interval</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;The highest-density interval containing a (1-alpha) fraction of the posterior samples.</span>
 
-<span class="sd">    :param samples: The posterior samples (array like)</span>
-<span class="sd">    :param alpha: The total size of the tails (Float between 0 and 1)</span>
-<span class="sd">    :return: Left and right interval bounds (tuple)</span>
+<span class="sd">    Parameter samples: The posterior samples (array like)</span>
+<span class="sd">    Parameter alpha: The total size of the tails (Float between 0 and 1)</span>
+<span class="sd">    Returns: Left and right interval bounds (tuple)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">samples_sorted</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
     <span class="n">window_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span> <span class="o">-</span> <span class="nb">round</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span><span class="o">*</span><span class="n">alpha</span><span class="p">))</span>
@@ -1274,22 +1282,26 @@ table {
     
   
     <div class="desc"><p>Simulate the posterior distribution of the given statistic.</p>
-<p>:param X: The observed data (array like)
-:param statistic: A function of the data to use in simulation (Function mapping array-like to number)
-:param n_replications: The number of bootstrap replications to perform (positive integer)
-:param resample_size: The size of the dataset in each replication
-:return: Samples from the posterior</p></div>
+<p>Parameter X: The observed data (array like)</p>
+<p>Parameter statistic: A function of the data to use in simulation (Function mapping array-like to number)</p>
+<p>Parameter n_replications: The number of bootstrap replications to perform (positive integer)</p>
+<p>Parameter resample_size: The size of the dataset in each replication</p>
+<p>Returns: Samples from the posterior</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-bayesian_bootstrap.bootstrap.bayesian_bootstrap', this);">Show source &equiv;</a></p>
   <div id="source-bayesian_bootstrap.bootstrap.bayesian_bootstrap" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">bayesian_bootstrap</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">statistic</span><span class="p">,</span> <span class="n">n_replications</span><span class="p">,</span> <span class="n">resample_size</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Simulate the posterior distribution of the given statistic.</span>
 
-<span class="sd">    :param X: The observed data (array like)</span>
-<span class="sd">    :param statistic: A function of the data to use in simulation (Function mapping array-like to number)</span>
-<span class="sd">    :param n_replications: The number of bootstrap replications to perform (positive integer)</span>
-<span class="sd">    :param resample_size: The size of the dataset in each replication</span>
-<span class="sd">    :return: Samples from the posterior</span>
+<span class="sd">    Parameter X: The observed data (array like)</span>
+
+<span class="sd">    Parameter statistic: A function of the data to use in simulation (Function mapping array-like to number)</span>
+
+<span class="sd">    Parameter n_replications: The number of bootstrap replications to perform (positive integer)</span>
+
+<span class="sd">    Parameter resample_size: The size of the dataset in each replication</span>
+
+<span class="sd">    Returns: Samples from the posterior</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">samples</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_replications</span><span class="p">):</span>
@@ -1315,24 +1327,24 @@ table {
     
   
     <div class="desc"><p>Simulate the posterior distribution of a statistic that uses dependent and independent variables.</p>
-<p>:param X: The observed data, independent variables (matrix like)
-:param y: The observed data, dependent variable (array like)
-:param statistic: A function of the data to use in simulation (Function mapping array-like to number)
-:param n_replications: The number of bootstrap replications to perform (positive integer)
-:param resample_size: The size of the dataset in each replication
-:return: Samples from the posterior</p></div>
+<p>Parameter X: The observed data, independent variables (matrix like)
+Parameter y: The observed data, dependent variable (array like)
+Parameter statistic: A function of the data to use in simulation (Function mapping array-like to number)
+Parameter n_replications: The number of bootstrap replications to perform (positive integer)
+Parameter resample_size: The size of the dataset in each replication
+Returns: Samples from the posterior</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-bayesian_bootstrap.bootstrap.bayesian_bootstrap_regression', this);">Show source &equiv;</a></p>
   <div id="source-bayesian_bootstrap.bootstrap.bayesian_bootstrap_regression" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">bayesian_bootstrap_regression</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">statistic</span><span class="p">,</span> <span class="n">n_replications</span><span class="p">,</span> <span class="n">resample_size</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Simulate the posterior distribution of a statistic that uses dependent and independent variables.</span>
 
-<span class="sd">    :param X: The observed data, independent variables (matrix like)</span>
-<span class="sd">    :param y: The observed data, dependent variable (array like)</span>
-<span class="sd">    :param statistic: A function of the data to use in simulation (Function mapping array-like to number)</span>
-<span class="sd">    :param n_replications: The number of bootstrap replications to perform (positive integer)</span>
-<span class="sd">    :param resample_size: The size of the dataset in each replication</span>
-<span class="sd">    :return: Samples from the posterior</span>
+<span class="sd">    Parameter X: The observed data, independent variables (matrix like)</span>
+<span class="sd">    Parameter y: The observed data, dependent variable (array like)</span>
+<span class="sd">    Parameter statistic: A function of the data to use in simulation (Function mapping array-like to number)</span>
+<span class="sd">    Parameter n_replications: The number of bootstrap replications to perform (positive integer)</span>
+<span class="sd">    Parameter resample_size: The size of the dataset in each replication</span>
+<span class="sd">    Returns: Samples from the posterior</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">samples</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">X_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
@@ -1362,18 +1374,18 @@ table {
     
   
     <div class="desc"><p>The equal-tailed interval containing a (1-alpha) fraction of the posterior samples.</p>
-<p>:param samples: The posterior samples (array like)
-:param alpha: The total size of the tails (Float between 0 and 1)
-:return: Left and right interval bounds (tuple)</p></div>
+<p>Parameter samples: The posterior samples (array like)
+Parameter alpha: The total size of the tails (Float between 0 and 1)
+Returns: Left and right interval bounds (tuple)</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-bayesian_bootstrap.bootstrap.central_credible_interval', this);">Show source &equiv;</a></p>
   <div id="source-bayesian_bootstrap.bootstrap.central_credible_interval" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">central_credible_interval</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;The equal-tailed interval containing a (1-alpha) fraction of the posterior samples.</span>
 
-<span class="sd">    :param samples: The posterior samples (array like)</span>
-<span class="sd">    :param alpha: The total size of the tails (Float between 0 and 1)</span>
-<span class="sd">    :return: Left and right interval bounds (tuple)</span>
+<span class="sd">    Parameter samples: The posterior samples (array like)</span>
+<span class="sd">    Parameter alpha: The total size of the tails (Float between 0 and 1)</span>
+<span class="sd">    Returns: Left and right interval bounds (tuple)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">tail_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">alpha</span><span class="o">/</span><span class="mi">2</span><span class="p">)))</span>
     <span class="n">samples_sorted</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
@@ -1395,18 +1407,18 @@ table {
     
   
     <div class="desc"><p>The highest-density interval containing a (1-alpha) fraction of the posterior samples.</p>
-<p>:param samples: The posterior samples (array like)
-:param alpha: The total size of the tails (Float between 0 and 1)
-:return: Left and right interval bounds (tuple)</p></div>
+<p>Parameter samples: The posterior samples (array like)
+Parameter alpha: The total size of the tails (Float between 0 and 1)
+Returns: Left and right interval bounds (tuple)</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-bayesian_bootstrap.bootstrap.highest_density_interval', this);">Show source &equiv;</a></p>
   <div id="source-bayesian_bootstrap.bootstrap.highest_density_interval" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">highest_density_interval</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;The highest-density interval containing a (1-alpha) fraction of the posterior samples.</span>
 
-<span class="sd">    :param samples: The posterior samples (array like)</span>
-<span class="sd">    :param alpha: The total size of the tails (Float between 0 and 1)</span>
-<span class="sd">    :return: Left and right interval bounds (tuple)</span>
+<span class="sd">    Parameter samples: The posterior samples (array like)</span>
+<span class="sd">    Parameter alpha: The total size of the tails (Float between 0 and 1)</span>
+<span class="sd">    Returns: Left and right interval bounds (tuple)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">samples_sorted</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
     <span class="n">window_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span> <span class="o">-</span> <span class="nb">round</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span><span class="o">*</span><span class="n">alpha</span><span class="p">))</span>
@@ -1436,18 +1448,20 @@ table {
     
   
     <div class="desc"><p>Simulate the posterior distribution of the mean.</p>
-<p>:param X: The observed data (array like)
-:param n_replications: The number of bootstrap replications to perform (positive integer)
-:return: Samples from the posterior</p></div>
+<p>Parameter X: The observed data (array like)</p>
+<p>Parameter n_replications: The number of bootstrap replications to perform (positive integer)</p>
+<p>Returns: Samples from the posterior</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-bayesian_bootstrap.bootstrap.mean', this);">Show source &equiv;</a></p>
   <div id="source-bayesian_bootstrap.bootstrap.mean" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">mean</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">n_replications</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Simulate the posterior distribution of the mean.</span>
 
-<span class="sd">    :param X: The observed data (array like)</span>
-<span class="sd">    :param n_replications: The number of bootstrap replications to perform (positive integer)</span>
-<span class="sd">    :return: Samples from the posterior</span>
+<span class="sd">    Parameter X: The observed data (array like)</span>
+
+<span class="sd">    Parameter n_replications: The number of bootstrap replications to perform (positive integer)</span>
+
+<span class="sd">    Returns: Samples from the posterior</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">samples</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_replications</span><span class="p">):</span>
@@ -1471,18 +1485,20 @@ table {
     
   
     <div class="desc"><p>Simulate the posterior distribution of the variance.</p>
-<p>:param X: The observed data (array like)
-:param n_replications: The number of bootstrap replications to perform (positive integer)
-:return: Samples from the posterior</p></div>
+<p>Parameter X: The observed data (array like)</p>
+<p>Parameter n_replications: The number of bootstrap replications to perform (positive integer)</p>
+<p>Returns: Samples from the posterior</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-bayesian_bootstrap.bootstrap.var', this);">Show source &equiv;</a></p>
   <div id="source-bayesian_bootstrap.bootstrap.var" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">var</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">n_replications</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Simulate the posterior distribution of the variance.</span>
 
-<span class="sd">    :param X: The observed data (array like)</span>
-<span class="sd">    :param n_replications: The number of bootstrap replications to perform (positive integer)</span>
-<span class="sd">    :return: Samples from the posterior</span>
+<span class="sd">    Parameter X: The observed data (array like)</span>
+
+<span class="sd">    Parameter n_replications: The number of bootstrap replications to perform (positive integer)</span>
+
+<span class="sd">    Returns: Samples from the posterior</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">samples</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_replications</span><span class="p">):</span>
@@ -1512,9 +1528,9 @@ table {
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_learner</span><span class="p">,</span> <span class="n">n_replications</span><span class="p">,</span> <span class="n">resample_size</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialize the base learners of the ensemble.</span>
 
-<span class="sd">        :param base_learner: A scikit-learn like estimator.</span>
-<span class="sd">        :param n_replications: The number of bootstrap replications to perform (positive integer)</span>
-<span class="sd">        :param resample_size: The size of the dataset in each replication</span>
+<span class="sd">        Parameter base_learner: A scikit-learn like estimator.</span>
+<span class="sd">        Parameter n_replications: The number of bootstrap replications to perform (positive integer)</span>
+<span class="sd">        Parameter resample_size: The size of the dataset in each replication</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">base_learner</span> <span class="o">=</span> <span class="n">base_learner</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_replications</span> <span class="o">=</span> <span class="n">n_replications</span>
@@ -1523,9 +1539,9 @@ table {
     <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Fit the base learners of the ensemble on a dataset.</span>
 
-<span class="sd">        :param X: The observed data, independent variables (matrix like)</span>
-<span class="sd">        :param y: The observed data, dependent variable (array like)</span>
-<span class="sd">        :return: Fitted model</span>
+<span class="sd">        Parameter X: The observed data, independent variables (matrix like)</span>
+<span class="sd">        Parameter y: The observed data, dependent variable (array like)</span>
+<span class="sd">        Returns: Fitted model</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">base_models_</span> <span class="o">=</span> <span class="n">bayesian_bootstrap_regression</span><span class="p">(</span><span class="n">X</span><span class="p">,</span>
                                                           <span class="n">y</span><span class="p">,</span>
@@ -1537,8 +1553,8 @@ table {
     <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Make average predictions for a collection of observations.</span>
 
-<span class="sd">        :param X: The observed data, independent variables (matrix like)</span>
-<span class="sd">        :return: The predicted dependent variable values (array like)</span>
+<span class="sd">        Parameter X: The observed data, independent variables (matrix like)</span>
+<span class="sd">        Returns: The predicted dependent variable values (array like)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">y_posterior_samples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_posterior_samples</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">y_posterior_samples</span><span class="p">])</span>
@@ -1546,8 +1562,8 @@ table {
     <span class="k">def</span> <span class="nf">predict_posterior_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Simulate posterior samples for a collection of observations.</span>
 
-<span class="sd">        :param X: The observed data, independent variables (matrix like)</span>
-<span class="sd">        :return: The simulated posterior mean (matrix like)</span>
+<span class="sd">        Parameter X: The observed data, independent variables (matrix like)</span>
+<span class="sd">        Returns: The simulated posterior mean (matrix like)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Return a X_r x self.n_replications matrix</span>
         <span class="n">y_posterior_samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_replications</span><span class="p">))</span>
@@ -1558,9 +1574,9 @@ table {
     <span class="k">def</span> <span class="nf">predict_central_interval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The equal-tailed interval prediction containing a (1-alpha) fraction of the posterior samples.</span>
 
-<span class="sd">        :param X: The observed data, independent variables (matrix like)</span>
-<span class="sd">        :param alpha: The total size of the tails (Float between 0 and 1)</span>
-<span class="sd">        :return: Left and right interval bounds for each input (matrix like)</span>
+<span class="sd">        Parameter X: The observed data, independent variables (matrix like)</span>
+<span class="sd">        Parameter alpha: The total size of the tails (Float between 0 and 1)</span>
+<span class="sd">        Returns: Left and right interval bounds for each input (matrix like)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">y_posterior_samples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_posterior_samples</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">central_credible_interval</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">y_posterior_samples</span><span class="p">])</span>
@@ -1568,9 +1584,9 @@ table {
     <span class="k">def</span> <span class="nf">predict_highest_density_interval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;The highest density interval prediction containing a (1-alpha) fraction of the posterior samples.</span>
 
-<span class="sd">        :param X: The observed data, independent variables (matrix like)</span>
-<span class="sd">        :param alpha: The total size of the tails (Float between 0 and 1)</span>
-<span class="sd">        :return: Left and right interval bounds for each input (matrix like):</span>
+<span class="sd">        Parameter X: The observed data, independent variables (matrix like)</span>
+<span class="sd">        Parameter alpha: The total size of the tails (Float between 0 and 1)</span>
+<span class="sd">        Returns: Left and right interval bounds for each input (matrix like):</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">y_posterior_samples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_posterior_samples</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">highest_density_interval</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">y_posterior_samples</span><span class="p">])</span>
@@ -1597,17 +1613,17 @@ table {
     
   
     <div class="desc"><p>Initialize the base learners of the ensemble.</p>
-<p>:param base_learner: A scikit-learn like estimator.
-:param n_replications: The number of bootstrap replications to perform (positive integer)
-:param resample_size: The size of the dataset in each replication</p></div>
+<p>Parameter base_learner: A scikit-learn like estimator.
+Parameter n_replications: The number of bootstrap replications to perform (positive integer)
+Parameter resample_size: The size of the dataset in each replication</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-bayesian_bootstrap.bootstrap.BayesianBootstrapBagging.__init__', this);">Show source &equiv;</a></p>
   <div id="source-bayesian_bootstrap.bootstrap.BayesianBootstrapBagging.__init__" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_learner</span><span class="p">,</span> <span class="n">n_replications</span><span class="p">,</span> <span class="n">resample_size</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Initialize the base learners of the ensemble.</span>
-<span class="sd">    :param base_learner: A scikit-learn like estimator.</span>
-<span class="sd">    :param n_replications: The number of bootstrap replications to perform (positive integer)</span>
-<span class="sd">    :param resample_size: The size of the dataset in each replication</span>
+<span class="sd">    Parameter base_learner: A scikit-learn like estimator.</span>
+<span class="sd">    Parameter n_replications: The number of bootstrap replications to perform (positive integer)</span>
+<span class="sd">    Parameter resample_size: The size of the dataset in each replication</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">base_learner</span> <span class="o">=</span> <span class="n">base_learner</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">n_replications</span> <span class="o">=</span> <span class="n">n_replications</span>
@@ -1629,17 +1645,17 @@ table {
     
   
     <div class="desc"><p>Fit the base learners of the ensemble on a dataset.</p>
-<p>:param X: The observed data, independent variables (matrix like)
-:param y: The observed data, dependent variable (array like)
-:return: Fitted model</p></div>
+<p>Parameter X: The observed data, independent variables (matrix like)
+Parameter y: The observed data, dependent variable (array like)
+Returns: Fitted model</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-bayesian_bootstrap.bootstrap.BayesianBootstrapBagging.fit', this);">Show source &equiv;</a></p>
   <div id="source-bayesian_bootstrap.bootstrap.BayesianBootstrapBagging.fit" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Fit the base learners of the ensemble on a dataset.</span>
-<span class="sd">    :param X: The observed data, independent variables (matrix like)</span>
-<span class="sd">    :param y: The observed data, dependent variable (array like)</span>
-<span class="sd">    :return: Fitted model</span>
+<span class="sd">    Parameter X: The observed data, independent variables (matrix like)</span>
+<span class="sd">    Parameter y: The observed data, dependent variable (array like)</span>
+<span class="sd">    Returns: Fitted model</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">base_models_</span> <span class="o">=</span> <span class="n">bayesian_bootstrap_regression</span><span class="p">(</span><span class="n">X</span><span class="p">,</span>
                                                       <span class="n">y</span><span class="p">,</span>
@@ -1664,15 +1680,15 @@ table {
     
   
     <div class="desc"><p>Make average predictions for a collection of observations.</p>
-<p>:param X: The observed data, independent variables (matrix like)
-:return: The predicted dependent variable values (array like)</p></div>
+<p>Parameter X: The observed data, independent variables (matrix like)
+Returns: The predicted dependent variable values (array like)</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-bayesian_bootstrap.bootstrap.BayesianBootstrapBagging.predict', this);">Show source &equiv;</a></p>
   <div id="source-bayesian_bootstrap.bootstrap.BayesianBootstrapBagging.predict" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Make average predictions for a collection of observations.</span>
-<span class="sd">    :param X: The observed data, independent variables (matrix like)</span>
-<span class="sd">    :return: The predicted dependent variable values (array like)</span>
+<span class="sd">    Parameter X: The observed data, independent variables (matrix like)</span>
+<span class="sd">    Returns: The predicted dependent variable values (array like)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">y_posterior_samples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_posterior_samples</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">y_posterior_samples</span><span class="p">])</span>
@@ -1693,17 +1709,17 @@ table {
     
   
     <div class="desc"><p>The equal-tailed interval prediction containing a (1-alpha) fraction of the posterior samples.</p>
-<p>:param X: The observed data, independent variables (matrix like)
-:param alpha: The total size of the tails (Float between 0 and 1)
-:return: Left and right interval bounds for each input (matrix like)</p></div>
+<p>Parameter X: The observed data, independent variables (matrix like)
+Parameter alpha: The total size of the tails (Float between 0 and 1)
+Returns: Left and right interval bounds for each input (matrix like)</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-bayesian_bootstrap.bootstrap.BayesianBootstrapBagging.predict_central_interval', this);">Show source &equiv;</a></p>
   <div id="source-bayesian_bootstrap.bootstrap.BayesianBootstrapBagging.predict_central_interval" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">predict_central_interval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;The equal-tailed interval prediction containing a (1-alpha) fraction of the posterior samples.</span>
-<span class="sd">    :param X: The observed data, independent variables (matrix like)</span>
-<span class="sd">    :param alpha: The total size of the tails (Float between 0 and 1)</span>
-<span class="sd">    :return: Left and right interval bounds for each input (matrix like)</span>
+<span class="sd">    Parameter X: The observed data, independent variables (matrix like)</span>
+<span class="sd">    Parameter alpha: The total size of the tails (Float between 0 and 1)</span>
+<span class="sd">    Returns: Left and right interval bounds for each input (matrix like)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">y_posterior_samples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_posterior_samples</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">central_credible_interval</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">y_posterior_samples</span><span class="p">])</span>
@@ -1724,17 +1740,17 @@ table {
     
   
     <div class="desc"><p>The highest density interval prediction containing a (1-alpha) fraction of the posterior samples.</p>
-<p>:param X: The observed data, independent variables (matrix like)
-:param alpha: The total size of the tails (Float between 0 and 1)
-:return: Left and right interval bounds for each input (matrix like):</p></div>
+<p>Parameter X: The observed data, independent variables (matrix like)
+Parameter alpha: The total size of the tails (Float between 0 and 1)
+Returns: Left and right interval bounds for each input (matrix like):</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-bayesian_bootstrap.bootstrap.BayesianBootstrapBagging.predict_highest_density_interval', this);">Show source &equiv;</a></p>
   <div id="source-bayesian_bootstrap.bootstrap.BayesianBootstrapBagging.predict_highest_density_interval" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">predict_highest_density_interval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;The highest density interval prediction containing a (1-alpha) fraction of the posterior samples.</span>
-<span class="sd">    :param X: The observed data, independent variables (matrix like)</span>
-<span class="sd">    :param alpha: The total size of the tails (Float between 0 and 1)</span>
-<span class="sd">    :return: Left and right interval bounds for each input (matrix like):</span>
+<span class="sd">    Parameter X: The observed data, independent variables (matrix like)</span>
+<span class="sd">    Parameter alpha: The total size of the tails (Float between 0 and 1)</span>
+<span class="sd">    Returns: Left and right interval bounds for each input (matrix like):</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">y_posterior_samples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_posterior_samples</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">highest_density_interval</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">y_posterior_samples</span><span class="p">])</span>
@@ -1755,15 +1771,15 @@ table {
     
   
     <div class="desc"><p>Simulate posterior samples for a collection of observations.</p>
-<p>:param X: The observed data, independent variables (matrix like)
-:return: The simulated posterior mean (matrix like)</p></div>
+<p>Parameter X: The observed data, independent variables (matrix like)
+Returns: The simulated posterior mean (matrix like)</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-bayesian_bootstrap.bootstrap.BayesianBootstrapBagging.predict_posterior_samples', this);">Show source &equiv;</a></p>
   <div id="source-bayesian_bootstrap.bootstrap.BayesianBootstrapBagging.predict_posterior_samples" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">predict_posterior_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Simulate posterior samples for a collection of observations.</span>
-<span class="sd">    :param X: The observed data, independent variables (matrix like)</span>
-<span class="sd">    :return: The simulated posterior mean (matrix like)</span>
+<span class="sd">    Parameter X: The observed data, independent variables (matrix like)</span>
+<span class="sd">    Returns: The simulated posterior mean (matrix like)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Return a X_r x self.n_replications matrix</span>
     <span class="n">y_posterior_samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_replications</span><span class="p">))</span>
