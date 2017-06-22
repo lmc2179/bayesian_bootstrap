@@ -15,7 +15,7 @@ setup(
         "Programming Language :: Python :: 2",
         "Intended Audience :: Developers",
         "Intended Audience :: Science/Research",
-        "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)",
+        # "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)",
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Topic :: Scientific/Engineering",
         ],
