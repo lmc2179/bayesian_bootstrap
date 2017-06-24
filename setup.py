@@ -8,16 +8,19 @@ setup(
     author_email = "louiscialdella@gmail.com",
     url = "https://github.com/lmc2179/bayesian_bootstrap",
     download_url = "https://github.com/lmc2179/bayesian_bootstrap/archive/master.zip",
-    keywords = ["statistics", "bayesian", "machine learning"],
+    keywords = ["statistics", "bayesian", "machine learning", "bootstrap"],
     classifiers = [
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 2",
         "Intended Audience :: Developers",
         "Intended Audience :: Science/Research",
-        # "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)",
+        "Topic :: Software Development :: Libraries :: Python Modules",
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Topic :: Scientific/Engineering",
+        "Operating System :: OS Independent",
+        "Topic :: Scientific/Engineering :: Mathematics",
+        "Topic :: Scientific/Engineering :: Artificial Intelligence"
         ],
     long_description = """"""
 )
