@@ -5,10 +5,20 @@
 This README contains some examples, below. For the documentation of the package's API, see the [docs](http://htmlpreview.github.io/?https://github.com/lmc2179/bayesian_bootstrap/blob/master/docs/bootstrap_documentation.html).
 
 # Example: Estimating the mean
+Let's say that we observe some data points, and we wish to simulate the posterior distribution of their mean.
 
+The following code draws four data points from an exponential distribution:
 ```
 X = np.random.exponential(7, 4)
 ```
+Now, we are going to simulate draws from the posterior of the mean. `bayesian_bootstrap` includes a `mean` function in 
+the `bootstrap` module that will do this for you.
+
+The code below performs the simulation and calculates the 95% highest density interval using 10,000 bootstrap replications. It also uses the wonderful 
+`seaborn` library to visualize the histogram with a Kernel density estimate. 
+
+Included for reference in the image is the same dataset used in a classical bootstrap, to illustrate the comparative 
+smoothness of the bayesian version.
 ```
 from bayesian_bootstrap.bootstrap import mean
 posterior_samples = mean(X, 10000)
