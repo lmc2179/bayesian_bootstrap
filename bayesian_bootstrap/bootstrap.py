@@ -84,7 +84,8 @@ class BayesianBootstrapBagging(object):
     def __init__(self, base_learner, n_replications, resample_size):
         """Initialize the base learners of the ensemble.
 
-        Parameter base_learner: A scikit-learn like estimator.
+        Parameter base_learner: A scikit-learn like estimator. This object should implement a fit() and predict()
+        method.
 
         Parameter n_replications: The number of bootstrap replications to perform (positive integer)
 

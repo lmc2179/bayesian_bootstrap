@@ -4,6 +4,26 @@
 
 This README contains some examples, below. For the documentation of the package's API, see the [docs](http://htmlpreview.github.io/?https://github.com/lmc2179/bayesian_bootstrap/blob/master/docs/bootstrap_documentation.html).
 
+# Overview of the `bootstrap` module
+
+The main module in the `bayesian_bootstrap` package is the `bootstrap` module. The `bootstrap` module contains tools 
+for doing approximate bayesian inference using the Bayesian Bootstrap introduced in [Rubin's _The Bayesian Bootstrap_](https://projecteuclid.org/euclid.aos/1176345338).
+
+It contains the following:
+
+* The `mean` and `var` functions, which simulate the posterior distributions of the mean and variance
+
+* The `bayesian_bootstrap` function, which simulates the posterior distribution of an arbitrary statistic
+
+* The `BayesianBootstrapBagging` class, a wrapper allowing users to generate ensembles of regressors/classifiers
+using Bayesian Bootstrap resampling. A base class with a scikit-learn like estimator needs to be provided. See also 
+the `bayesian_bootstrap_regression` function.
+
+* The `central_credible_interval` and `highest_density_interval` functions, which compute credible intervals from
+posterior samples.
+
+For more information about the function signatures above, see the examples below or the docstrings of each function/class.
+
 # Example: Estimating the mean
 Let's say that we observe some data points, and we wish to simulate the posterior distribution of their mean.
 
@@ -27,6 +47,15 @@ l, r = highest_density_interval(posterior_samples)
 plt.title('Bayesian Bootstrap of mean')
 sns.distplot(posterior_samples, label='Bayesian Bootstrap Samples')
 plt.plot([l, r], [0, 0], linewidth=5.0, marker='o', label='95% HDI')
+```
+
+The above code uses the `mean` method to simulate the posterior distribution of the mean. However, it is a special 
+(if very common) case, along with `var` - all other statistics should use the `bayesian_bootstrap` method. The
+ following code demonstrates doing this for the posterior of the mean:
+
+```
+from bayesian_bootstrap.bootstrap import bayesian_bootstrap
+posterior_samples = bayesian_bootstrap(X, np.mean, 10000, 100)
 ```
 
 ![Posterior](bayesian_bootstrap/demos/readme_exponential.png)

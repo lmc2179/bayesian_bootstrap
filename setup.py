@@ -22,5 +22,5 @@ setup(
         "Topic :: Scientific/Engineering :: Mathematics",
         "Topic :: Scientific/Engineering :: Artificial Intelligence"
         ],
-    long_description = """"""
+    long_description = """bayesian_bootstrap is a package for Bayesian bootstrapping in Python. For more information about this package and its usage, visit https://github.com/lmc2179/bayesian_bootstrap."""
 )
