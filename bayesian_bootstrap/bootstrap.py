@@ -11,9 +11,9 @@ def mean(X, n_replications):
     Returns: Samples from the posterior
     """
     samples = []
-    for _ in range(n_replications):
-        weights = _bootstrap_replicate(X)
-        samples.append(np.dot(X, weights))
+    weights = np.random.dirichlet([1]*len(X), n_replications)
+    for w in weights:
+        samples.append(np.dot(X, w))
     return samples
 
 def var(X, n_replications):
