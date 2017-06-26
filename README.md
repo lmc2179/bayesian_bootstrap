@@ -72,14 +72,21 @@ Show posterior samples for slope
 
 Show show scatterplot with prediction bands
 -->
+Let's take another example - fitting a linear regression model. The following code samples a few points in the plane.
+The mean is y = x, and normally distributed noise is added.
 ```
 X = np.random.normal(0, 1, 5).reshape(-1, 1)
 y = X.reshape(1, -1).reshape(5) + np.random.normal(0, 1, 5)
 ```
+We build models via bootstrap resampling, creating an ensemble of models via bootstrap aggregating. A 
+`BayesianBootstrapBagging` wrapper class is available in the library, which is a bayesian analogue to scikit-learn's 
+`BaggingRegressor` and `BaggingClassifer` classes.
 ```
 m = BayesianBootstrapBagging(LinearRegression(), 10000, 1000)
 m.fit(X, y)
 ```
+Once we've got our ensemble trained, we can make interval predictions for new inputs by calculating their HDIs under the
+ensemble:
 ```
 X_plot = np.linspace(min(X), max(X))
 y_predicted = m.predict(X_plot.reshape(-1, 1))
@@ -94,8 +101,10 @@ plt.savefig('readme_regression.png', bbox_inches='tight')
 ```
 ![Posterior](bayesian_bootstrap/demos/readme_regression.png)
 
+Users interested in accessing the base models can do so via the `base_models_` attribute of the object.
 
 # Further reading
 
-https://projecteuclid.org/euclid.aos/1176345338
-http://notstatschat.tumblr.com/post/156650638586/when-the-bootstrap-doesnt-work
+* [_The Bayesian Bootstrap_, Rubin, 1981](https://projecteuclid.org/euclid.aos/1176345338)
+
+* [Rasmus Bååth's original writeup on the Bayesian Bootstrap](http://www.sumsar.net/blog/2015/04/the-non-parametric-bootstrap-as-a-bayesian-model/)
