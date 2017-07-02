@@ -4,3 +4,4 @@ include bayesian_bootstrap\__init__.py
 include bayesian_bootstrap\bootstrap.py
 include README.md
 include requirements.txt
+include bayesian_bootstrap\docs\bootstrap_documentation.html
