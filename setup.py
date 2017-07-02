@@ -8,7 +8,7 @@ setup(
     author_email = "louiscialdella@gmail.com",
     url = "https://github.com/lmc2179/bayesian_bootstrap",
     download_url = "https://github.com/lmc2179/bayesian_bootstrap/archive/master.zip",
-    keywords = ["statistics", "bayesian", "machine learning", "bootstrap"],
+    keywords = ["statistics", "bayesian", "machine learning", "bootstrap", "bayes", "probability", "inference"],
     classifiers = [
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
