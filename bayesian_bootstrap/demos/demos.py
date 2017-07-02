@@ -4,7 +4,7 @@ from scipy.stats import norm
 from sklearn.linear_model import LinearRegression
 from sklearn.utils import resample
 from bayesian_bootstrap.bootstrap import mean, var, bayesian_bootstrap, bayesian_bootstrap_regression, \
-    BayesianBootstrapBagging, highest_density_interval
+    BayesianBootstrapBagging, highest_density_interval, covar
 from tqdm import tqdm
 import numpy as np
 
@@ -38,6 +38,19 @@ def plot_var_bootstrap():
     sns.distplot(posterior_samples)
     classical_samples = [np.var(resample(X)) for _ in range(10000)]
     sns.distplot(classical_samples)
+    plt.show()
+
+def plot_self_covar_bootstrap():
+    X = np.random.uniform(-1, 1, 100)
+    posterior_samples = covar(X, X, 10000)
+    sns.distplot(posterior_samples)
+    plt.show()
+
+def plot_covar_bootstrap():
+    X = np.random.normal(0, 1, 100)
+    Y = np.random.normal(0, 1, 100)
+    posterior_samples = covar(X, Y, 10000)
+    sns.distplot(posterior_samples)
     plt.show()
 
 def plot_var_resample_bootstrap():
@@ -126,9 +139,11 @@ if __name__ == '__main__':
     # plot_mean_resample_bootstrap()
     # plot_median()
     # plot_var_bootstrap()
+    # plot_self_covar_bootstrap()
+    plot_covar_bootstrap()
     # plot_var_resample_bootstrap()
     # plot_mean_method_comparison()
     # plot_regression_bootstrap()
     # plot_regression_wrapper_bootstrap()
     # plot_mean_bootstrap_exponential_readme()
-    plot_regression_slope_distribution_readme()
+    # plot_regression_slope_distribution_readme()

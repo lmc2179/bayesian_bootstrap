@@ -31,6 +31,15 @@ def var(X, n_replications):
         samples.append(np.dot([x ** 2 for x in X], w) - np.dot(X, w) ** 2)
     return samples
 
+def covar(X, Y, n_replications):
+    samples = []
+    weights = np.random.dirichlet([1]*len(X), n_replications)
+    for w in weights:
+        X_mean = np.dot(X, w)
+        Y_mean = np.dot(Y, w)
+        samples.append(np.dot(w, (X - X_mean)*(Y - Y_mean)))
+    return samples
+
 def bayesian_bootstrap(X, statistic, n_replications, resample_size):
     """Simulate the posterior distribution of the given statistic.
 

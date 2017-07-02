@@ -2,7 +2,7 @@ import unittest
 import numpy as np
 import random
 from bayesian_bootstrap.bootstrap import mean, var, bayesian_bootstrap, central_credible_interval, \
-    highest_density_interval, BayesianBootstrapBagging
+    highest_density_interval, BayesianBootstrapBagging, covar
 from sklearn.linear_model import LinearRegression
 
 class TestMoments(unittest.TestCase):
@@ -16,6 +16,17 @@ class TestMoments(unittest.TestCase):
         X = np.random.uniform(-1, 1, 500)
         posterior_samples = var(X, 10000)
         self.assertAlmostEqual(np.mean(posterior_samples), 1/3., delta=0.05)
+
+    def test_self_covar(self):
+        X = np.random.uniform(-1, 1, 500)
+        posterior_samples = covar(X, X, 10000)
+        self.assertAlmostEqual(np.mean(posterior_samples), np.var(X), delta=0.05)
+
+    def test_covar(self):
+        X = np.random.uniform(-1, 1, 500)
+        Y = np.random.uniform(-1, 1, 500)
+        posterior_samples = covar(X, Y, 10000)
+        self.assertAlmostEqual(np.mean(posterior_samples), 0, delta=0.05)
 
     def test_mean_resample(self):
         X = [-1, 0, 1]
