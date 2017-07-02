@@ -32,6 +32,16 @@ def var(X, n_replications):
     return samples
 
 def covar(X, Y, n_replications):
+    """Simulate the posterior distribution of the covariance.
+
+        Parameter X: The observed data, first variable (array like)
+
+        Parameter Y: The observed data, second (array like)
+
+        Parameter n_replications: The number of bootstrap replications to perform (positive integer)
+
+        Returns: Samples from the posterior
+    """
     samples = []
     weights = np.random.dirichlet([1]*len(X), n_replications)
     for w in weights:
