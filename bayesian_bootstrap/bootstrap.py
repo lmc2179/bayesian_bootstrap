@@ -63,10 +63,13 @@ def bayesian_bootstrap(X, statistic, n_replications, resample_size):
 
     Returns: Samples from the posterior
     """
+    if isinstance(X, list):
+        X = np.array(X)
     samples = []
     weights = np.random.dirichlet([1]*len(X), n_replications)
     for w in weights:
-        resample_X = np.random.choice(X, p=w, size=resample_size)
+        sample_index = np.random.choice(range(len(X)), p=w, size=resample_size)
+        resample_X = X[sample_index]
         s = statistic(resample_X)
         samples.append(s)
     return samples
