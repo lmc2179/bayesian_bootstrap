@@ -4,6 +4,8 @@
 
 This README contains some examples, below. For the documentation of the package's API, see the [docs](http://htmlpreview.github.io/?https://github.com/lmc2179/bayesian_bootstrap/blob/master/docs/bootstrap_documentation.html).
 
+This package is on pypi - you can install it with `pip install bayesian_bootstrap`.
+
 # Overview of the `bootstrap` module
 
 The main module in the `bayesian_bootstrap` package is the `bootstrap` module. The `bootstrap` module contains tools 
