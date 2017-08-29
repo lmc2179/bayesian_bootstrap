@@ -76,7 +76,7 @@ def bayesian_bootstrap(X, statistic, n_replications, resample_size,low_mem:bool=
             s = statistic(resample_X)
             samples.append(s)
     else:
-        for rep in n_replications:
+        for rep in range(n_replications):
             weights = np.random.dirichlet([1]*len(X))
             for w in weights:
                 sample_index = np.random.choice(range(len(X)), p=w, size=resample_size)
@@ -114,7 +114,7 @@ def bayesian_bootstrap_regression(X, y, statistic, n_replications, resample_size
             s = statistic(resample_X, resample_y)
             samples.append(s)
     else:
-        for rep in n_replications:
+        for rep in range(n_replications):
             weights = np.random.dirichlet([1]*len(X))
             for w in weights:
                 resample_i = np.random.choice(range(len(X_arr)), p=w, size=resample_size)
