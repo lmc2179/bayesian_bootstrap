@@ -50,7 +50,7 @@ def covar(X, Y, n_replications):
         samples.append(np.dot(w, (X - X_mean)*(Y - Y_mean)))
     return samples
 
-def bayesian_bootstrap(X, statistic, n_replications, resample_size):
+def bayesian_bootstrap(X, statistic, n_replications, resample_size,low_mem:bool=False):
     """Simulate the posterior distribution of the given statistic.
 
     Parameter X: The observed data (array like)
@@ -66,12 +66,21 @@ def bayesian_bootstrap(X, statistic, n_replications, resample_size):
     if isinstance(X, list):
         X = np.array(X)
     samples = []
-    weights = np.random.dirichlet([1]*len(X), n_replications)
-    for w in weights:
-        sample_index = np.random.choice(range(len(X)), p=w, size=resample_size)
-        resample_X = X[sample_index]
-        s = statistic(resample_X)
-        samples.append(s)
+    if not(low_mem):
+        weights = np.random.dirichlet([1]*len(X), n_replications)
+        for w in weights:
+            sample_index = np.random.choice(range(len(X)), p=w, size=resample_size)
+            resample_X = X[sample_index]
+            s = statistic(resample_X)
+            samples.append(s)
+    else:
+        for rep in n_replications:
+            weights = np.random.dirichlet([1]*len(X))
+            for w in weights:
+                sample_index = np.random.choice(range(len(X)), p=w, size=resample_size)
+                resample_W = X[sample_index]
+                s = statistic(resample_X)
+                samples.append(s)
     return samples
 
 def bayesian_bootstrap_regression(X, y, statistic, n_replications, resample_size):
