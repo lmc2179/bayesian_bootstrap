@@ -83,7 +83,7 @@ def bayesian_bootstrap(X, statistic, n_replications, resample_size,low_mem:bool=
                 samples.append(s)
     return samples
 
-def bayesian_bootstrap_regression(X, y, statistic, n_replications, resample_size):
+def bayesian_bootstrap_regression(X, y, statistic, n_replications, resample_size,low_mem:bool=False):
     """Simulate the posterior distribution of a statistic that uses dependent and independent variables.
 
     Parameter X: The observed data, independent variables (matrix like)
@@ -101,13 +101,24 @@ def bayesian_bootstrap_regression(X, y, statistic, n_replications, resample_size
     samples = []
     X_arr = np.array(X)
     y_arr = np.array(y)
-    weights = np.random.dirichlet([1]*len(X), n_replications)
-    for w in weights:
-        resample_i = np.random.choice(range(len(X_arr)), p=w, size=resample_size)
-        resample_X = X_arr[resample_i]
-        resample_y = y_arr[resample_i]
-        s = statistic(resample_X, resample_y)
-        samples.append(s)
+    if not(low_mem):
+        weights = np.random.dirichlet([1]*len(X), n_replications)
+        for w in weights:
+            resample_i = np.random.choice(range(len(X_arr)), p=w, size=resample_size)
+            resample_X = X_arr[resample_i]
+            resample_y = y_arr[resample_i]
+            s = statistic(resample_X, resample_y)
+            samples.append(s)
+    else:
+        for rep in n_replications:
+            weights = np.random.dirichlet([1]*len(X))
+            for w in weights:
+                resample_i = np.random.choice(range(len(X_arr)), p=w, size=resample_size)
+                resample_X = X_arr[resample_i]
+                resample_y = y_arr[resample_i]
+                s = statistic(resample_X, resample_y)
+                samples.append(s)
+
     return samples
 
 class BayesianBootstrapBagging(object):
