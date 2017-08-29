@@ -87,3 +87,6 @@ class TestRegression(unittest.TestCase):
         l, r = highest_density_interval(intercept_samples, alpha=0.05)
         self.assertLess(l, 0)
         self.assertGreater(r, 0)
+        
+if __name__ == '__main__':
+    unittest.main()
