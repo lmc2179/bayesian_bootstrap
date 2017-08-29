@@ -30,7 +30,7 @@ class TestMoments(unittest.TestCase):
 
     def test_mean_resample(self):
         X = [-1, 0, 1]
-        posterior_samples = bayesian_bootstrap(X, np.mean, 10000, 100)
+        posterior_samples = bayesian_bootstrap(X, np.mean, 10000, 100,low_mem=True)
         self.assertAlmostEqual(np.mean(posterior_samples), 0, delta=0.01)
         self.assertAlmostEqual(len([s for s in posterior_samples if s < 0]), 5000, delta=1000)
 
@@ -68,7 +68,7 @@ class TestRegression(unittest.TestCase):
     def test_parameter_estimation(self):
         X = np.random.uniform(0, 4, 1000)
         y = X + np.random.normal(0, 1, 1000)
-        m = BayesianBootstrapBagging(LinearRegression(), 10000, 1000)
+        m = BayesianBootstrapBagging(LinearRegression(), 10000, 1000, low_mem=True)
         m.fit(X.reshape(-1, 1), y)
         coef_samples = [b.coef_ for b in m.base_models_]
         intercept_samples = [b.intercept_ for b in m.base_models_]
