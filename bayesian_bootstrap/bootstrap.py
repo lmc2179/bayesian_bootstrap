@@ -60,6 +60,8 @@ def bayesian_bootstrap(X, statistic, n_replications, resample_size,low_mem:bool=
     Parameter n_replications: The number of bootstrap replications to perform (positive integer)
 
     Parameter resample_size: The size of the dataset in each replication
+    
+    Parameter low_mem(bool): Use looping instead of generating all the dirichlet, use if program use too much memory
 
     Returns: Samples from the posterior
     """
@@ -95,6 +97,8 @@ def bayesian_bootstrap_regression(X, y, statistic, n_replications, resample_size
     Parameter n_replications: The number of bootstrap replications to perform (positive integer)
 
     Parameter resample_size: The size of the dataset in each replication
+    
+    Parameter low_mem(bool): Use looping instead of generating all the dirichlet, use if program use too much memory
 
     Returns: Samples from the posterior
     """
@@ -123,7 +127,7 @@ def bayesian_bootstrap_regression(X, y, statistic, n_replications, resample_size
 
 class BayesianBootstrapBagging(object):
     """A bootstrap aggregating model using the bayesian bootstrap. Similar to scikit-learn's BaggingRegressor."""
-    def __init__(self, base_learner, n_replications, resample_size):
+    def __init__(self, base_learner, n_replications, resample_size,low_mem:bool=False):
         """Initialize the base learners of the ensemble.
 
         Parameter base_learner: A scikit-learn like estimator. This object should implement a fit() and predict()
@@ -132,10 +136,13 @@ class BayesianBootstrapBagging(object):
         Parameter n_replications: The number of bootstrap replications to perform (positive integer)
 
         Parameter resample_size: The size of the dataset in each replication
+        
+        Parameter low_mem(bool): Use looping instead of generating all the dirichlet, use if program use too much memory
         """
         self.base_learner = base_learner
         self.n_replications = n_replications
         self.resample_size = resample_size
+        self.memo=low_mem
 
     def fit(self, X, y):
         """Fit the base learners of the ensemble on a dataset.
@@ -150,7 +157,8 @@ class BayesianBootstrapBagging(object):
                                                           y,
                                                           lambda X, y: deepcopy(self.base_learner).fit(X, y),
                                                           self.n_replications,
-                                                          self.resample_size)
+                                                          self.resample_size,
+                                                          low_mem=self.memo)
         return self
 
     def predict(self, X):
