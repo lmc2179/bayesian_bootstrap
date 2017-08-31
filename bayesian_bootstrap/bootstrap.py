@@ -76,13 +76,12 @@ def bayesian_bootstrap(X, statistic, n_replications, resample_size,low_mem:bool=
             s = statistic(resample_X)
             samples.append(s)
     else:
-        for rep in range(n_replications):
-            weights = np.random.dirichlet([1]*len(X))
-            for w in weights:
-                sample_index = np.random.choice(range(len(X)), p=w, size=resample_size)
-                resample_W = X[sample_index]
-                s = statistic(resample_X)
-                samples.append(s)
+        weights = (np.random.dirichlet([1]*len(X)) for _ in range(n_replications))
+        for w in weights:
+            sample_index = np.random.choice(range(len(X)), p=w, size=resample_size)
+            resample_X = X[sample_index]
+            s = statistic(resample_X)
+            samples.append(s)
     return samples
 
 def bayesian_bootstrap_regression(X, y, statistic, n_replications, resample_size,low_mem:bool=False):
@@ -114,14 +113,13 @@ def bayesian_bootstrap_regression(X, y, statistic, n_replications, resample_size
             s = statistic(resample_X, resample_y)
             samples.append(s)
     else:
-        for rep in range(n_replications):
-            weights = np.random.dirichlet([1]*len(X))
-            for w in weights:
-                resample_i = np.random.choice(range(len(X_arr)), p=w, size=resample_size)
-                resample_X = X_arr[resample_i]
-                resample_y = y_arr[resample_i]
-                s = statistic(resample_X, resample_y)
-                samples.append(s)
+        weights = (np.random.dirichlet([1]*len(X)) for _ in range(n_replications))
+        for w in weights:
+            resample_i = np.random.choice(range(len(X_arr)), p=w, size=resample_size)
+            resample_X = X_arr[resample_i]
+            resample_y = y_arr[resample_i]
+            s = statistic(resample_X, resample_y)
+            samples.append(s)
 
     return samples
 
