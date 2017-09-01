@@ -50,7 +50,7 @@ def covar(X, Y, n_replications):
         samples.append(np.dot(w, (X - X_mean)*(Y - Y_mean)))
     return samples
 
-def bayesian_bootstrap(X, statistic, n_replications, resample_size,low_mem:bool=False):
+def bayesian_bootstrap(X, statistic, n_replications, resample_size,low_mem=False):
     """Simulate the posterior distribution of the given statistic.
 
     Parameter X: The observed data (array like)
@@ -84,7 +84,7 @@ def bayesian_bootstrap(X, statistic, n_replications, resample_size,low_mem:bool=
             samples.append(s)
     return samples
 
-def bayesian_bootstrap_regression(X, y, statistic, n_replications, resample_size,low_mem:bool=False):
+def bayesian_bootstrap_regression(X, y, statistic, n_replications, resample_size,low_mem=False):
     """Simulate the posterior distribution of a statistic that uses dependent and independent variables.
 
     Parameter X: The observed data, independent variables (matrix like)
@@ -125,7 +125,7 @@ def bayesian_bootstrap_regression(X, y, statistic, n_replications, resample_size
 
 class BayesianBootstrapBagging(object):
     """A bootstrap aggregating model using the bayesian bootstrap. Similar to scikit-learn's BaggingRegressor."""
-    def __init__(self, base_learner, n_replications, resample_size,low_mem:bool=False):
+    def __init__(self, base_learner, n_replications, resample_size,low_mem=False):
         """Initialize the base learners of the ensemble.
 
         Parameter base_learner: A scikit-learn like estimator. This object should implement a fit() and predict()
