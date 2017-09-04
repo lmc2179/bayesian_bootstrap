@@ -1138,7 +1138,7 @@ table {
         <span class="n">samples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="p">(</span><span class="n">X</span> <span class="o">-</span> <span class="n">X_mean</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">Y</span> <span class="o">-</span> <span class="n">Y_mean</span><span class="p">)))</span>
     <span class="k">return</span> <span class="n">samples</span>
 
-<span class="k">def</span> <span class="nf">bayesian_bootstrap</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">statistic</span><span class="p">,</span> <span class="n">n_replications</span><span class="p">,</span> <span class="n">resample_size</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">bayesian_bootstrap</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">statistic</span><span class="p">,</span> <span class="n">n_replications</span><span class="p">,</span> <span class="n">resample_size</span><span class="p">,</span><span class="n">low_mem</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Simulate the posterior distribution of the given statistic.</span>
 
 <span class="sd">    Parameter X: The observed data (array like)</span>
@@ -1148,18 +1148,27 @@ table {
 <span class="sd">    Parameter n_replications: The number of bootstrap replications to perform (positive integer)</span>
 
 <span class="sd">    Parameter resample_size: The size of the dataset in each replication</span>
+<span class="sd">    </span>
+<span class="sd">    Parameter low_mem(bool): Generate the weights for each iteration lazily instead of in a single batch. Will use</span>
+<span class="sd">    less memory, but will run slower as a result.</span>
 
 <span class="sd">    Returns: Samples from the posterior</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
     <span class="n">samples</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">dirichlet</span><span class="p">([</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="n">n_replications</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">low_mem</span><span class="p">:</span>
+        <span class="n">weights</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">dirichlet</span><span class="p">([</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">))</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_replications</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">dirichlet</span><span class="p">([</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="n">n_replications</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">weights</span><span class="p">:</span>
-        <span class="n">resample_X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">w</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">resample_size</span><span class="p">)</span>
+        <span class="n">sample_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)),</span> <span class="n">p</span><span class="o">=</span><span class="n">w</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">resample_size</span><span class="p">)</span>
+        <span class="n">resample_X</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">sample_index</span><span class="p">]</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">statistic</span><span class="p">(</span><span class="n">resample_X</span><span class="p">)</span>
         <span class="n">samples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">samples</span>
 
-<span class="k">def</span> <span class="nf">bayesian_bootstrap_regression</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">statistic</span><span class="p">,</span> <span class="n">n_replications</span><span class="p">,</span> <span class="n">resample_size</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">bayesian_bootstrap_regression</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">statistic</span><span class="p">,</span> <span class="n">n_replications</span><span class="p">,</span> <span class="n">resample_size</span><span class="p">,</span><span class="n">low_mem</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Simulate the posterior distribution of a statistic that uses dependent and independent variables.</span>
 
 <span class="sd">    Parameter X: The observed data, independent variables (matrix like)</span>
@@ -1171,24 +1180,30 @@ table {
 <span class="sd">    Parameter n_replications: The number of bootstrap replications to perform (positive integer)</span>
 
 <span class="sd">    Parameter resample_size: The size of the dataset in each replication</span>
+<span class="sd">    </span>
+<span class="sd">    Parameter low_mem(bool): Use looping instead of generating all the dirichlet, use if program use too much memory</span>
 
 <span class="sd">    Returns: Samples from the posterior</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">samples</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">X_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
     <span class="n">y_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
-    <span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">dirichlet</span><span class="p">([</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="n">n_replications</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">low_mem</span><span class="p">:</span>
+        <span class="n">weights</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">dirichlet</span><span class="p">([</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">))</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_replications</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">dirichlet</span><span class="p">([</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="n">n_replications</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">weights</span><span class="p">:</span>
         <span class="n">resample_i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X_arr</span><span class="p">)),</span> <span class="n">p</span><span class="o">=</span><span class="n">w</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">resample_size</span><span class="p">)</span>
         <span class="n">resample_X</span> <span class="o">=</span> <span class="n">X_arr</span><span class="p">[</span><span class="n">resample_i</span><span class="p">]</span>
         <span class="n">resample_y</span> <span class="o">=</span> <span class="n">y_arr</span><span class="p">[</span><span class="n">resample_i</span><span class="p">]</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">statistic</span><span class="p">(</span><span class="n">resample_X</span><span class="p">,</span> <span class="n">resample_y</span><span class="p">)</span>
         <span class="n">samples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+
     <span class="k">return</span> <span class="n">samples</span>
 
 <span class="k">class</span> <span class="nc">BayesianBootstrapBagging</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A bootstrap aggregating model using the bayesian bootstrap. Similar to scikit-learn&#39;s BaggingRegressor.&quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_learner</span><span class="p">,</span> <span class="n">n_replications</span><span class="p">,</span> <span class="n">resample_size</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_learner</span><span class="p">,</span> <span class="n">n_replications</span><span class="p">,</span> <span class="n">resample_size</span><span class="p">,</span> <span class="n">low_mem</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialize the base learners of the ensemble.</span>
 
 <span class="sd">        Parameter base_learner: A scikit-learn like estimator. This object should implement a fit() and predict()</span>
@@ -1197,10 +1212,14 @@ table {
 <span class="sd">        Parameter n_replications: The number of bootstrap replications to perform (positive integer)</span>
 
 <span class="sd">        Parameter resample_size: The size of the dataset in each replication</span>
+<span class="sd">        </span>
+<span class="sd">        Parameter low_mem(bool): Generate the weights for each iteration lazily instead of in a single batch. Will use</span>
+<span class="sd">        less memory, but will run slower as a result.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">base_learner</span> <span class="o">=</span> <span class="n">base_learner</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_replications</span> <span class="o">=</span> <span class="n">n_replications</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">resample_size</span> <span class="o">=</span> <span class="n">resample_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">memo</span> <span class="o">=</span> <span class="n">low_mem</span>
 
     <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Fit the base learners of the ensemble on a dataset.</span>
@@ -1215,7 +1234,8 @@ table {
                                                           <span class="n">y</span><span class="p">,</span>
                                                           <span class="k">lambda</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_learner</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span>
                                                           <span class="bp">self</span><span class="o">.</span><span class="n">n_replications</span><span class="p">,</span>
-                                                          <span class="bp">self</span><span class="o">.</span><span class="n">resample_size</span><span class="p">)</span>
+                                                          <span class="bp">self</span><span class="o">.</span><span class="n">resample_size</span><span class="p">,</span>
+                                                          <span class="n">low_mem</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">memo</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span>
 
     <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
@@ -1315,7 +1335,7 @@ table {
       
   <div class="item">
     <div class="name def" id="bayesian_bootstrap.bootstrap.bayesian_bootstrap">
-    <p>def <span class="ident">bayesian_bootstrap</span>(</p><p>X, statistic, n_replications, resample_size)</p>
+    <p>def <span class="ident">bayesian_bootstrap</span>(</p><p>X, statistic, n_replications, resample_size, low_mem=False)</p>
     </div>
     
 
@@ -1326,11 +1346,13 @@ table {
 <p>Parameter statistic: A function of the data to use in simulation (Function mapping array-like to number)</p>
 <p>Parameter n_replications: The number of bootstrap replications to perform (positive integer)</p>
 <p>Parameter resample_size: The size of the dataset in each replication</p>
+<p>Parameter low_mem(bool): Generate the weights for each iteration lazily instead of in a single batch. Will use
+less memory, but will run slower as a result.</p>
 <p>Returns: Samples from the posterior</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-bayesian_bootstrap.bootstrap.bayesian_bootstrap', this);">Show source &equiv;</a></p>
   <div id="source-bayesian_bootstrap.bootstrap.bayesian_bootstrap" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">bayesian_bootstrap</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">statistic</span><span class="p">,</span> <span class="n">n_replications</span><span class="p">,</span> <span class="n">resample_size</span><span class="p">):</span>
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">bayesian_bootstrap</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">statistic</span><span class="p">,</span> <span class="n">n_replications</span><span class="p">,</span> <span class="n">resample_size</span><span class="p">,</span><span class="n">low_mem</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Simulate the posterior distribution of the given statistic.</span>
 
 <span class="sd">    Parameter X: The observed data (array like)</span>
@@ -1340,13 +1362,22 @@ table {
 <span class="sd">    Parameter n_replications: The number of bootstrap replications to perform (positive integer)</span>
 
 <span class="sd">    Parameter resample_size: The size of the dataset in each replication</span>
+<span class="sd">    </span>
+<span class="sd">    Parameter low_mem(bool): Generate the weights for each iteration lazily instead of in a single batch. Will use</span>
+<span class="sd">    less memory, but will run slower as a result.</span>
 
 <span class="sd">    Returns: Samples from the posterior</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
     <span class="n">samples</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">dirichlet</span><span class="p">([</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="n">n_replications</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">low_mem</span><span class="p">:</span>
+        <span class="n">weights</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">dirichlet</span><span class="p">([</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">))</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_replications</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">dirichlet</span><span class="p">([</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="n">n_replications</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">weights</span><span class="p">:</span>
-        <span class="n">resample_X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">w</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">resample_size</span><span class="p">)</span>
+        <span class="n">sample_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)),</span> <span class="n">p</span><span class="o">=</span><span class="n">w</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">resample_size</span><span class="p">)</span>
+        <span class="n">resample_X</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">sample_index</span><span class="p">]</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">statistic</span><span class="p">(</span><span class="n">resample_X</span><span class="p">)</span>
         <span class="n">samples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">samples</span>
@@ -1360,7 +1391,7 @@ table {
       
   <div class="item">
     <div class="name def" id="bayesian_bootstrap.bootstrap.bayesian_bootstrap_regression">
-    <p>def <span class="ident">bayesian_bootstrap_regression</span>(</p><p>X, y, statistic, n_replications, resample_size)</p>
+    <p>def <span class="ident">bayesian_bootstrap_regression</span>(</p><p>X, y, statistic, n_replications, resample_size, low_mem=False)</p>
     </div>
     
 
@@ -1372,11 +1403,12 @@ table {
 <p>Parameter statistic: A function of the data to use in simulation (Function mapping array-like to number)</p>
 <p>Parameter n_replications: The number of bootstrap replications to perform (positive integer)</p>
 <p>Parameter resample_size: The size of the dataset in each replication</p>
+<p>Parameter low_mem(bool): Use looping instead of generating all the dirichlet, use if program use too much memory</p>
 <p>Returns: Samples from the posterior</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-bayesian_bootstrap.bootstrap.bayesian_bootstrap_regression', this);">Show source &equiv;</a></p>
   <div id="source-bayesian_bootstrap.bootstrap.bayesian_bootstrap_regression" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">bayesian_bootstrap_regression</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">statistic</span><span class="p">,</span> <span class="n">n_replications</span><span class="p">,</span> <span class="n">resample_size</span><span class="p">):</span>
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">bayesian_bootstrap_regression</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">statistic</span><span class="p">,</span> <span class="n">n_replications</span><span class="p">,</span> <span class="n">resample_size</span><span class="p">,</span><span class="n">low_mem</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Simulate the posterior distribution of a statistic that uses dependent and independent variables.</span>
 
 <span class="sd">    Parameter X: The observed data, independent variables (matrix like)</span>
@@ -1388,19 +1420,25 @@ table {
 <span class="sd">    Parameter n_replications: The number of bootstrap replications to perform (positive integer)</span>
 
 <span class="sd">    Parameter resample_size: The size of the dataset in each replication</span>
+<span class="sd">    </span>
+<span class="sd">    Parameter low_mem(bool): Use looping instead of generating all the dirichlet, use if program use too much memory</span>
 
 <span class="sd">    Returns: Samples from the posterior</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">samples</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">X_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
     <span class="n">y_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
-    <span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">dirichlet</span><span class="p">([</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="n">n_replications</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">low_mem</span><span class="p">:</span>
+        <span class="n">weights</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">dirichlet</span><span class="p">([</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">))</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_replications</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">dirichlet</span><span class="p">([</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="n">n_replications</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">weights</span><span class="p">:</span>
         <span class="n">resample_i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X_arr</span><span class="p">)),</span> <span class="n">p</span><span class="o">=</span><span class="n">w</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">resample_size</span><span class="p">)</span>
         <span class="n">resample_X</span> <span class="o">=</span> <span class="n">X_arr</span><span class="p">[</span><span class="n">resample_i</span><span class="p">]</span>
         <span class="n">resample_y</span> <span class="o">=</span> <span class="n">y_arr</span><span class="p">[</span><span class="n">resample_i</span><span class="p">]</span>
         <span class="n">s</span> <span class="o">=</span> <span class="n">statistic</span><span class="p">(</span><span class="n">resample_X</span><span class="p">,</span> <span class="n">resample_y</span><span class="p">)</span>
         <span class="n">samples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+
     <span class="k">return</span> <span class="n">samples</span>
 </pre></div>
 
@@ -1616,7 +1654,7 @@ table {
   <div id="source-bayesian_bootstrap.bootstrap.BayesianBootstrapBagging" class="source">
     <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">BayesianBootstrapBagging</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A bootstrap aggregating model using the bayesian bootstrap. Similar to scikit-learn&#39;s BaggingRegressor.&quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_learner</span><span class="p">,</span> <span class="n">n_replications</span><span class="p">,</span> <span class="n">resample_size</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_learner</span><span class="p">,</span> <span class="n">n_replications</span><span class="p">,</span> <span class="n">resample_size</span><span class="p">,</span> <span class="n">low_mem</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialize the base learners of the ensemble.</span>
 
 <span class="sd">        Parameter base_learner: A scikit-learn like estimator. This object should implement a fit() and predict()</span>
@@ -1625,10 +1663,14 @@ table {
 <span class="sd">        Parameter n_replications: The number of bootstrap replications to perform (positive integer)</span>
 
 <span class="sd">        Parameter resample_size: The size of the dataset in each replication</span>
+<span class="sd">        </span>
+<span class="sd">        Parameter low_mem(bool): Generate the weights for each iteration lazily instead of in a single batch. Will use</span>
+<span class="sd">        less memory, but will run slower as a result.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">base_learner</span> <span class="o">=</span> <span class="n">base_learner</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_replications</span> <span class="o">=</span> <span class="n">n_replications</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">resample_size</span> <span class="o">=</span> <span class="n">resample_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">memo</span> <span class="o">=</span> <span class="n">low_mem</span>
 
     <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Fit the base learners of the ensemble on a dataset.</span>
@@ -1643,7 +1685,8 @@ table {
                                                           <span class="n">y</span><span class="p">,</span>
                                                           <span class="k">lambda</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_learner</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span>
                                                           <span class="bp">self</span><span class="o">.</span><span class="n">n_replications</span><span class="p">,</span>
-                                                          <span class="bp">self</span><span class="o">.</span><span class="n">resample_size</span><span class="p">)</span>
+                                                          <span class="bp">self</span><span class="o">.</span><span class="n">resample_size</span><span class="p">,</span>
+                                                          <span class="n">low_mem</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">memo</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span>
 
     <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
@@ -1708,7 +1751,7 @@ table {
             
   <div class="item">
     <div class="name def" id="bayesian_bootstrap.bootstrap.BayesianBootstrapBagging.__init__">
-    <p>def <span class="ident">__init__</span>(</p><p>self, base_learner, n_replications, resample_size)</p>
+    <p>def <span class="ident">__init__</span>(</p><p>self, base_learner, n_replications, resample_size, low_mem=False)</p>
     </div>
     
 
@@ -1718,20 +1761,26 @@ table {
 <p>Parameter base_learner: A scikit-learn like estimator. This object should implement a fit() and predict()
 method.</p>
 <p>Parameter n_replications: The number of bootstrap replications to perform (positive integer)</p>
-<p>Parameter resample_size: The size of the dataset in each replication</p></div>
+<p>Parameter resample_size: The size of the dataset in each replication</p>
+<p>Parameter low_mem(bool): Generate the weights for each iteration lazily instead of in a single batch. Will use
+less memory, but will run slower as a result.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-bayesian_bootstrap.bootstrap.BayesianBootstrapBagging.__init__', this);">Show source &equiv;</a></p>
   <div id="source-bayesian_bootstrap.bootstrap.BayesianBootstrapBagging.__init__" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_learner</span><span class="p">,</span> <span class="n">n_replications</span><span class="p">,</span> <span class="n">resample_size</span><span class="p">):</span>
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_learner</span><span class="p">,</span> <span class="n">n_replications</span><span class="p">,</span> <span class="n">resample_size</span><span class="p">,</span> <span class="n">low_mem</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Initialize the base learners of the ensemble.</span>
 <span class="sd">    Parameter base_learner: A scikit-learn like estimator. This object should implement a fit() and predict()</span>
 <span class="sd">    method.</span>
 <span class="sd">    Parameter n_replications: The number of bootstrap replications to perform (positive integer)</span>
 <span class="sd">    Parameter resample_size: The size of the dataset in each replication</span>
+<span class="sd">    </span>
+<span class="sd">    Parameter low_mem(bool): Generate the weights for each iteration lazily instead of in a single batch. Will use</span>
+<span class="sd">    less memory, but will run slower as a result.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">base_learner</span> <span class="o">=</span> <span class="n">base_learner</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">n_replications</span> <span class="o">=</span> <span class="n">n_replications</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">resample_size</span> <span class="o">=</span> <span class="n">resample_size</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">memo</span> <span class="o">=</span> <span class="n">low_mem</span>
 </pre></div>
 
   </div>
@@ -1765,7 +1814,8 @@ method.</p>
                                                       <span class="n">y</span><span class="p">,</span>
                                                       <span class="k">lambda</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_learner</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span>
                                                       <span class="bp">self</span><span class="o">.</span><span class="n">n_replications</span><span class="p">,</span>
-                                                      <span class="bp">self</span><span class="o">.</span><span class="n">resample_size</span><span class="p">)</span>
+                                                      <span class="bp">self</span><span class="o">.</span><span class="n">resample_size</span><span class="p">,</span>
+                                                      <span class="n">low_mem</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">memo</span><span class="p">)</span>
     <span class="k">return</span> <span class="bp">self</span>
 </pre></div>
 
@@ -1900,6 +1950,16 @@ method.</p>
           <h3>Instance variables</h3>
             <div class="item">
             <p id="bayesian_bootstrap.bootstrap.BayesianBootstrapBagging.base_learner" class="name">var <span class="ident">base_learner</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="bayesian_bootstrap.bootstrap.BayesianBootstrapBagging.memo" class="name">var <span class="ident">memo</span></p>
             
 
             
