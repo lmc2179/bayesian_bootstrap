@@ -61,27 +61,23 @@ def bayesian_bootstrap(X, statistic, n_replications, resample_size,low_mem=False
 
     Parameter resample_size: The size of the dataset in each replication
     
-    Parameter low_mem(bool): Use looping instead of generating all the dirichlet, use if program use too much memory
+    Parameter low_mem(bool): Generate the weights for each iteration lazily instead of in a single batch. Will use
+    less memory, but will run slower as a result.
 
     Returns: Samples from the posterior
     """
     if isinstance(X, list):
         X = np.array(X)
     samples = []
-    if not(low_mem):
-        weights = np.random.dirichlet([1]*len(X), n_replications)
-        for w in weights:
-            sample_index = np.random.choice(range(len(X)), p=w, size=resample_size)
-            resample_X = X[sample_index]
-            s = statistic(resample_X)
-            samples.append(s)
+    if low_mem:
+        weights = (np.random.dirichlet([1] * len(X)) for _ in range(n_replications))
     else:
-        weights = (np.random.dirichlet([1]*len(X)) for _ in range(n_replications))
-        for w in weights:
-            sample_index = np.random.choice(range(len(X)), p=w, size=resample_size)
-            resample_X = X[sample_index]
-            s = statistic(resample_X)
-            samples.append(s)
+        weights = np.random.dirichlet([1] * len(X), n_replications)
+    for w in weights:
+        sample_index = np.random.choice(range(len(X)), p=w, size=resample_size)
+        resample_X = X[sample_index]
+        s = statistic(resample_X)
+        samples.append(s)
     return samples
 
 def bayesian_bootstrap_regression(X, y, statistic, n_replications, resample_size,low_mem=False):
@@ -104,28 +100,22 @@ def bayesian_bootstrap_regression(X, y, statistic, n_replications, resample_size
     samples = []
     X_arr = np.array(X)
     y_arr = np.array(y)
-    if not(low_mem):
-        weights = np.random.dirichlet([1]*len(X), n_replications)
-        for w in weights:
-            resample_i = np.random.choice(range(len(X_arr)), p=w, size=resample_size)
-            resample_X = X_arr[resample_i]
-            resample_y = y_arr[resample_i]
-            s = statistic(resample_X, resample_y)
-            samples.append(s)
+    if low_mem:
+        weights = (np.random.dirichlet([1] * len(X)) for _ in range(n_replications))
     else:
-        weights = (np.random.dirichlet([1]*len(X)) for _ in range(n_replications))
-        for w in weights:
-            resample_i = np.random.choice(range(len(X_arr)), p=w, size=resample_size)
-            resample_X = X_arr[resample_i]
-            resample_y = y_arr[resample_i]
-            s = statistic(resample_X, resample_y)
-            samples.append(s)
+        weights = np.random.dirichlet([1] * len(X), n_replications)
+    for w in weights:
+        resample_i = np.random.choice(range(len(X_arr)), p=w, size=resample_size)
+        resample_X = X_arr[resample_i]
+        resample_y = y_arr[resample_i]
+        s = statistic(resample_X, resample_y)
+        samples.append(s)
 
     return samples
 
 class BayesianBootstrapBagging(object):
     """A bootstrap aggregating model using the bayesian bootstrap. Similar to scikit-learn's BaggingRegressor."""
-    def __init__(self, base_learner, n_replications, resample_size,low_mem=False):
+    def __init__(self, base_learner, n_replications, resample_size, low_mem=False):
         """Initialize the base learners of the ensemble.
 
         Parameter base_learner: A scikit-learn like estimator. This object should implement a fit() and predict()
@@ -135,12 +125,13 @@ class BayesianBootstrapBagging(object):
 
         Parameter resample_size: The size of the dataset in each replication
         
-        Parameter low_mem(bool): Use looping instead of generating all the dirichlet, use if program use too much memory
+        Parameter low_mem(bool): Generate the weights for each iteration lazily instead of in a single batch. Will use
+        less memory, but will run slower as a result.
         """
         self.base_learner = base_learner
         self.n_replications = n_replications
         self.resample_size = resample_size
-        self.memo=low_mem
+        self.memo = low_mem
 
     def fit(self, X, y):
         """Fit the base learners of the ensemble on a dataset.

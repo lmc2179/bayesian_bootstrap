@@ -39,8 +39,12 @@ class TestMoments(unittest.TestCase):
         
     def test_var_resample(self):
         X = np.random.uniform(-1, 1, 500)
-        posterior_samples = bayesian_bootstrap(X, np.var, 10000, 5000)
+        posterior_samples = bayesian_bootstrap(X, np.var, 10000, 5000, low_mem=True)
         self.assertAlmostEqual(np.mean(posterior_samples), 1/3., delta=0.05)
+        X = np.random.uniform(-1, 1, 500)
+        posterior_samples = bayesian_bootstrap(X, np.var, 10000, 5000, low_mem=False)
+        self.assertAlmostEqual(np.mean(posterior_samples), 1 / 3., delta=0.05)
+
 
 class TestIntervals(unittest.TestCase):
     def test_central_credible_interval(self):
@@ -67,8 +71,8 @@ class TestIntervals(unittest.TestCase):
         random.shuffle(x)
         return x
 
-class TestRegression1_lm(unittest.TestCase):
-    def test_parameter_estimation(self):
+class TestRegression(unittest.TestCase):
+    def test_parameter_estimation_low_memory(self):
         X = np.random.uniform(0, 4, 1000)
         y = X + np.random.normal(0, 1, 1000)
         m = BayesianBootstrapBagging(LinearRegression(), 10000, 1000, low_mem=True)
@@ -90,8 +94,8 @@ class TestRegression1_lm(unittest.TestCase):
         l, r = highest_density_interval(intercept_samples, alpha=0.05)
         self.assertLess(l, 0)
         self.assertGreater(r, 0)
-        
-class TestRegression(unittest.TestCase):
+
+
     def test_parameter_estimation(self):
         X = np.random.uniform(0, 4, 1000)
         y = X + np.random.normal(0, 1, 1000)

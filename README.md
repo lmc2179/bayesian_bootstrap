@@ -105,6 +105,20 @@ plt.savefig('readme_regression.png', bbox_inches='tight')
 
 Users interested in accessing the base models can do so via the `base_models_` attribute of the object.
 
+# Contributions
+
+Interested in contributing? We'd love to have your help! Please keep the following in mind:
+
+* Bug fixes are welcome! Make sure you reference the issue number that is being resolved, and that all test cases in `tests` pass on both Python 2.7 and 3.4/3.5.
+
+* New features are welcome as well! Any new features should include docstrings and unit tests in the `tests` directory.
+
+* If you want to contribute a case study or other documentation, feel free to write up a github-flavored markdown document or ipython notebook and put it in the `examples` folder before issuing a pull request.
+
+Credit for past contributions:
+
+* [roya0045](https://github.com/roya0045) implemented the original version of the low-memory optimizations.
+
 # Further reading
 
 * [_The Bayesian Bootstrap_, Rubin, 1981](https://projecteuclid.org/euclid.aos/1176345338)
