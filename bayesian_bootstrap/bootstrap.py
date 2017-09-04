@@ -50,7 +50,7 @@ def covar(X, Y, n_replications):
         samples.append(np.dot(w, (X - X_mean)*(Y - Y_mean)))
     return samples
 
-def bayesian_bootstrap(X, statistic, n_replications, resample_size):
+def bayesian_bootstrap(X, statistic, n_replications, resample_size,low_mem=False):
     """Simulate the posterior distribution of the given statistic.
 
     Parameter X: The observed data (array like)
@@ -60,21 +60,31 @@ def bayesian_bootstrap(X, statistic, n_replications, resample_size):
     Parameter n_replications: The number of bootstrap replications to perform (positive integer)
 
     Parameter resample_size: The size of the dataset in each replication
+    
+    Parameter low_mem(bool): Use looping instead of generating all the dirichlet, use if program use too much memory
 
     Returns: Samples from the posterior
     """
     if isinstance(X, list):
         X = np.array(X)
     samples = []
-    weights = np.random.dirichlet([1]*len(X), n_replications)
-    for w in weights:
-        sample_index = np.random.choice(range(len(X)), p=w, size=resample_size)
-        resample_X = X[sample_index]
-        s = statistic(resample_X)
-        samples.append(s)
+    if not(low_mem):
+        weights = np.random.dirichlet([1]*len(X), n_replications)
+        for w in weights:
+            sample_index = np.random.choice(range(len(X)), p=w, size=resample_size)
+            resample_X = X[sample_index]
+            s = statistic(resample_X)
+            samples.append(s)
+    else:
+        weights = (np.random.dirichlet([1]*len(X)) for _ in range(n_replications))
+        for w in weights:
+            sample_index = np.random.choice(range(len(X)), p=w, size=resample_size)
+            resample_X = X[sample_index]
+            s = statistic(resample_X)
+            samples.append(s)
     return samples
 
-def bayesian_bootstrap_regression(X, y, statistic, n_replications, resample_size):
+def bayesian_bootstrap_regression(X, y, statistic, n_replications, resample_size,low_mem=False):
     """Simulate the posterior distribution of a statistic that uses dependent and independent variables.
 
     Parameter X: The observed data, independent variables (matrix like)
@@ -86,24 +96,36 @@ def bayesian_bootstrap_regression(X, y, statistic, n_replications, resample_size
     Parameter n_replications: The number of bootstrap replications to perform (positive integer)
 
     Parameter resample_size: The size of the dataset in each replication
+    
+    Parameter low_mem(bool): Use looping instead of generating all the dirichlet, use if program use too much memory
 
     Returns: Samples from the posterior
     """
     samples = []
     X_arr = np.array(X)
     y_arr = np.array(y)
-    weights = np.random.dirichlet([1]*len(X), n_replications)
-    for w in weights:
-        resample_i = np.random.choice(range(len(X_arr)), p=w, size=resample_size)
-        resample_X = X_arr[resample_i]
-        resample_y = y_arr[resample_i]
-        s = statistic(resample_X, resample_y)
-        samples.append(s)
+    if not(low_mem):
+        weights = np.random.dirichlet([1]*len(X), n_replications)
+        for w in weights:
+            resample_i = np.random.choice(range(len(X_arr)), p=w, size=resample_size)
+            resample_X = X_arr[resample_i]
+            resample_y = y_arr[resample_i]
+            s = statistic(resample_X, resample_y)
+            samples.append(s)
+    else:
+        weights = (np.random.dirichlet([1]*len(X)) for _ in range(n_replications))
+        for w in weights:
+            resample_i = np.random.choice(range(len(X_arr)), p=w, size=resample_size)
+            resample_X = X_arr[resample_i]
+            resample_y = y_arr[resample_i]
+            s = statistic(resample_X, resample_y)
+            samples.append(s)
+
     return samples
 
 class BayesianBootstrapBagging(object):
     """A bootstrap aggregating model using the bayesian bootstrap. Similar to scikit-learn's BaggingRegressor."""
-    def __init__(self, base_learner, n_replications, resample_size):
+    def __init__(self, base_learner, n_replications, resample_size,low_mem=False):
         """Initialize the base learners of the ensemble.
 
         Parameter base_learner: A scikit-learn like estimator. This object should implement a fit() and predict()
@@ -112,10 +134,13 @@ class BayesianBootstrapBagging(object):
         Parameter n_replications: The number of bootstrap replications to perform (positive integer)
 
         Parameter resample_size: The size of the dataset in each replication
+        
+        Parameter low_mem(bool): Use looping instead of generating all the dirichlet, use if program use too much memory
         """
         self.base_learner = base_learner
         self.n_replications = n_replications
         self.resample_size = resample_size
+        self.memo=low_mem
 
     def fit(self, X, y):
         """Fit the base learners of the ensemble on a dataset.
@@ -130,7 +155,8 @@ class BayesianBootstrapBagging(object):
                                                           y,
                                                           lambda X, y: deepcopy(self.base_learner).fit(X, y),
                                                           self.n_replications,
-                                                          self.resample_size)
+                                                          self.resample_size,
+                                                          low_mem=self.memo)
         return self
 
     def predict(self, X):
