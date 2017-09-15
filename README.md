@@ -26,6 +26,12 @@ posterior samples.
 
 For more information about the function signatures above, see the examples below or the docstrings of each function/class.
 
+One thing that's worth making clear is the interpretation of the parameters of the `bayesian_bootstrap`, `BayesianBootstrapBagging`, and `bayesian_bootstrap_regression` functions, which all do sampling within each bootstrap replication:
+
+* The number of replications is the number of times the statistic of interested will be replicated. If we think about the classical bootstrap, this is the number of times your dataset is resampled. If we think about it from a bayesian point of view, this is the number of draws from the posterior distribution.
+
+* The resample size is the size of the dataset used to calculate the statistic of interest in each replication. More is better - you'll probably want this to be at least as large as your original dataset.
+
 # Example: Estimating the mean
 Let's say that we observe some data points, and we wish to simulate the posterior distribution of their mean.
 
