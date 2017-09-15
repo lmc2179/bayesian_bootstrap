@@ -45,10 +45,29 @@ def covar(X, Y, n_replications):
     samples = []
     weights = np.random.dirichlet([1]*len(X), n_replications)
     for w in weights:
-        X_mean = np.dot(X, w)
-        Y_mean = np.dot(Y, w)
-        samples.append(np.dot(w, (X - X_mean)*(Y - Y_mean)))
+        cv = _weighted_covariance(X, Y, w)
+        samples.append(cv)
     return samples
+
+def _weighted_covariance(X, Y, w):
+    X_mean = np.dot(X, w)
+    Y_mean = np.dot(Y, w)
+    cv = np.dot(w, (X - X_mean) * (Y - Y_mean))
+    return cv
+
+def _weighted_ls(X, w, y):
+    x_rows, x_cols = X.shape
+    w_matrix = np.array(w) * np.eye(x_rows)
+    coef = np.dot(np.dot(np.dot(np.linalg.inv(np.dot(np.dot(X.T, w_matrix), X)), X.T), w_matrix), y)
+    return coef
+
+def linear_regression(X, y, n_replications):
+    coef_samples = []
+    intercept_samples = []
+    weights = np.random.dirichlet([1]*len(X), n_replications)
+    for w in weights:
+        coef_samples.append(_weighted_ls(X, w, y))
+    return np.vstack(coef_samples)
 
 def bayesian_bootstrap(X, statistic, n_replications, resample_size,low_mem=False):
     """Simulate the posterior distribution of the given statistic.
