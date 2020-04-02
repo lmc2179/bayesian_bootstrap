@@ -124,17 +124,21 @@ def bayesian_bootstrap_regression(X, y, statistic, n_replications, resample_size
     else:
         weights = np.random.dirichlet([1] * len(X), n_replications)
     for w in weights:
-        resample_i = np.random.choice(range(len(X_arr)), p=w, size=resample_size)
-        resample_X = X_arr[resample_i]
-        resample_y = y_arr[resample_i]
-        s = statistic(resample_X, resample_y)
+        if resample_size is None:
+            s = statistic(X, y, w)
+        else:
+            resample_i = np.random.choice(range(len(X_arr)), p=w, size=resample_size)
+            resample_X = X_arr[resample_i]
+            resample_y = y_arr[resample_i]
+            s = statistic(resample_X, resample_y)
         samples.append(s)
 
     return samples
 
+
 class BayesianBootstrapBagging(object):
     """A bootstrap aggregating model using the bayesian bootstrap. Similar to scikit-learn's BaggingRegressor."""
-    def __init__(self, base_learner, n_replications, resample_size, low_mem=False):
+    def __init__(self, base_learner, n_replications, resample_size=None, low_mem=False):
         """Initialize the base learners of the ensemble.
 
         Parameter base_learner: A scikit-learn like estimator. This object should implement a fit() and predict()
@@ -161,12 +165,18 @@ class BayesianBootstrapBagging(object):
 
         Returns: Fitted model
         """
-        self.base_models_ = bayesian_bootstrap_regression(X,
-                                                          y,
-                                                          lambda X, y: deepcopy(self.base_learner).fit(X, y),
-                                                          self.n_replications,
-                                                          self.resample_size,
-                                                          low_mem=self.memo)
+        if self.resample_size is None:
+            statistic = lambda X, y, w: deepcopy(self.base_learner).fit(X, y, w)
+        else:
+            statistic = lambda X, y: deepcopy(self.base_learner).fit(X, y)
+        self.base_models_ = bayesian_bootstrap_regression(
+            X,
+            y,
+            statistic,
+            self.n_replications,
+            self.resample_size,
+            low_mem=self.memo
+        )
         return self
 
     def predict(self, X):
