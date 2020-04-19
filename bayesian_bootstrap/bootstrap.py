@@ -10,11 +10,9 @@ def mean(X, n_replications):
 
     Returns: Samples from the posterior
     """
-    samples = []
-    weights = np.random.dirichlet([1]*len(X), n_replications)
-    for w in weights:
-        samples.append(np.dot(X, w))
-    return samples
+    rg = np.random.default_rng()
+    weights = rg.dirichlet(np.ones(len(X)), n_replications)
+    return np.dot(X, weights.T)
 
 def var(X, n_replications):
     """Simulate the posterior distribution of the variance.
