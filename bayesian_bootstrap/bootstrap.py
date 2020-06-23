@@ -224,6 +224,26 @@ class BayesianBootstrapBagging(object):
         y_posterior_samples = self.predict_posterior_samples(X)
         return np.array([highest_density_interval(r, alpha=alpha) for r in y_posterior_samples])
 
+    def get_model_attrs(self, attr_name):
+        """
+        Get array of function attributes
+
+        """
+        return np.asarray([getattr(model, attr_name) for model in self.base_models_])
+
+    def get_model_attr(self, attr_name, func=None):
+        """
+        Apply mean or custom function to model attributes.
+
+        Function must take axis argument in order to reduce all attributes 
+        to just one as if it wasn't an ensemble of models.
+
+        """
+        if func is None:
+            func = np.mean
+        return func(self.get_model_attrs(attr_name), axis=0)
+
+
 def central_credible_interval(samples, alpha=0.05):
     """The equal-tailed interval containing a (1-alpha) fraction of the posterior samples.
 
