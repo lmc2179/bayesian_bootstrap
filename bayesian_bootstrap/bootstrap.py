@@ -57,17 +57,16 @@ def pearsonr(X, Y, n_replications):
     """
     rg = np.random.default_rng()
     weights = rg.dirichlet(np.ones(len(X)), n_replications)
-    samples = []
-    for w in weights:
-        samples.append(_weighted_pearsonr(X, Y, w))
-    return np.asarray(samples)
+    return _weighted_pearsonr(X, Y, weights)
 
 
 def _weighted_covariance(X, Y, w):
-    X_mean = np.dot(X, w)
-    Y_mean = np.dot(Y, w)
-    cv = np.dot(w, (X - X_mean) * (Y - Y_mean))
-    return cv
+    X_mean = np.dot(X, w.T).reshape(-1, 1)
+    Y_mean = np.dot(Y, w.T).reshape(-1, 1)
+    # Another approach, but less efficient
+    # np.diag(np.dot(w, (x - X_mean) * (y - Y_mean)).T)
+    # https://stackoverflow.com/a/14759273
+    return (w * ((X - X_mean) * (Y - Y_mean))).sum(-1)
 
 
 def _weighted_pearsonr(X, Y, w):
