@@ -124,7 +124,7 @@ Interested in contributing? We'd love to have your help! Please keep the followi
 Credit for past contributions:
 
 * [roya0045](https://github.com/roya0045) implemented the original version of the low-memory optimizations.
-* [JulianWgs](https://github.com/JulianWgs) implemented the Bayesian machine learning model using weight distributions instead of resampling.
+* [JulianWgs](https://github.com/JulianWgs) implemented the Bayesian machine learning model using weight distributions instead of resampling and a weighted Pearson correlation coefficient. He also refactored the weighted mean and covariance function to accept weight matrices.
 
 # Further reading
 

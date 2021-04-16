@@ -1,6 +1,8 @@
 import unittest
 import numpy as np
+import scipy
 import random
+import bayesian_bootstrap.bootstrap as bb
 from bayesian_bootstrap.bootstrap import mean, var, bayesian_bootstrap, central_credible_interval, \
     highest_density_interval, BayesianBootstrapBagging, covar
 from sklearn.linear_model import LinearRegression
@@ -164,6 +166,29 @@ class TestRegression(unittest.TestCase):
         l, r = highest_density_interval(intercept_samples, alpha=0.05)
         self.assertLess(l, 0)
         self.assertGreater(r, 0)
+
+
+def test_pearsonr():
+    x = np.linspace(0, 5, 10)
+    y = np.linspace(0, 5, 10)
+    assert np.mean(bb.pearsonr(x, y, 10000)) == 1
+    assert np.mean(bb.pearsonr(x, -y, 10000)) == -1
+
+    np.random.seed(1337)
+    x = [0, 1, 3, 6]
+    y = [1, 2, 5, 7]
+    assert np.isclose(
+        np.mean(bb.pearsonr(x, y, 10000)),
+        scipy.stats.pearsonr(x, y)[0], atol=0.001)
+
+    np.random.seed(1337)
+    x = np.linspace(-10, 10, 10000)
+    y = np.abs(x)
+    assert np.isclose(
+        scipy.stats.pearsonr(x, y)[0],
+        np.mean(bb.pearsonr(x, y, 1000)), atol=0.001)
+
+
 
 
 if __name__ == '__main__':

@@ -47,11 +47,41 @@ def covar(X, Y, n_replications):
         samples.append(cv)
     return samples
 
+
+def pearsonr(X, Y, n_replications):
+    """
+    Pearson correlation coefficient and p-value for testing non-correlation.
+
+    https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.pearsonr.html
+
+    """
+    rg = np.random.default_rng()
+    weights = rg.dirichlet(np.ones(len(X)), n_replications)
+    return _weighted_pearsonr(X, Y, weights)
+
+
 def _weighted_covariance(X, Y, w):
-    X_mean = np.dot(X, w)
-    Y_mean = np.dot(Y, w)
-    cv = np.dot(w, (X - X_mean) * (Y - Y_mean))
-    return cv
+    X_mean = np.dot(X, w.T).reshape(-1, 1)
+    Y_mean = np.dot(Y, w.T).reshape(-1, 1)
+    # Another approach, but less efficient
+    # np.diag(np.dot(w, (x - X_mean) * (y - Y_mean)).T)
+    # https://stackoverflow.com/a/14759273
+    return (w * ((X - X_mean) * (Y - Y_mean))).sum(-1)
+
+
+def _weighted_pearsonr(X, Y, w):
+    """
+    Weighted Pearson correlation.
+
+    """
+    return (
+        _weighted_covariance(X, Y, w)
+        / np.sqrt(
+            _weighted_covariance(X, X, w)
+            * _weighted_covariance(Y, Y, w)
+        )
+    )
+
 
 def _weighted_ls(X, w, y):
     x_rows, x_cols = X.shape
