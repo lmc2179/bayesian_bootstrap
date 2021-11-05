@@ -1,7 +1,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
 import seaborn as sns
-from bayesian_bootstrap.bootstrap import linear_regression
+from bayesian_bootstrap import linear_regression
 
 X = np.linspace(-5, 5, 50)
 y = 2 * X + np.random.normal(0, 1, 50)

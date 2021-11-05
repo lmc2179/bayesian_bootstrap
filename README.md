@@ -48,7 +48,7 @@ The code below performs the simulation and calculates the 95% highest density in
 Included for reference in the image is the same dataset used in a classical bootstrap, to illustrate the comparative 
 smoothness of the bayesian version.
 ```
-from bayesian_bootstrap.bootstrap import mean, highest_density_interval
+from bayesian_bootstrap import mean, highest_density_interval
 posterior_samples = mean(X, 10000)
 l, r = highest_density_interval(posterior_samples)
 
@@ -62,7 +62,7 @@ The above code uses the `mean` method to simulate the posterior distribution of 
  following code demonstrates doing this for the posterior of the mean:
 
 ```
-from bayesian_bootstrap.bootstrap import bayesian_bootstrap
+from bayesian_bootstrap import bayesian_bootstrap
 posterior_samples = bayesian_bootstrap(X, np.mean, 10000, 100)
 ```
 
