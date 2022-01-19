@@ -2,7 +2,7 @@ from matplotlib import pyplot as plt
 import seaborn as sns
 from sklearn.linear_model import LinearRegression
 from sklearn.utils import resample
-from bayesian_bootstrap.bootstrap import (
+from bayesian_bootstrap import (
     mean,
     var,
     bayesian_bootstrap,

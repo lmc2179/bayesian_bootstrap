@@ -2,8 +2,8 @@ import unittest
 import numpy as np
 import scipy
 import random
-import bayesian_bootstrap.bootstrap as bb
-from bayesian_bootstrap.bootstrap import (
+import bayesian_bootstrap as bb
+from bayesian_bootstrap import (
     mean,
     var,
     bayesian_bootstrap,
@@ -19,7 +19,7 @@ class TestMoments(unittest.TestCase):
     def test_mean(self):
         X = [-1, 0, 1]
         posterior_samples = mean(X, 10000)
-        self.assertAlmostEqual(np.mean(posterior_samples), 0, delta=0.01)
+        self.assertAlmostEqual(np.mean(posterior_samples), 0, delta=0.015)
         self.assertAlmostEqual(len([s for s in posterior_samples if s < 0]), 5000, delta=1000)
 
     def test_variance(self):

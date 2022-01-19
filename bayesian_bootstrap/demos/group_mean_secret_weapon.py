@@ -1,5 +1,5 @@
 import numpy as np
-from bayesian_bootstrap.bootstrap import mean, highest_density_interval
+from bayesian_bootstrap import mean, highest_density_interval
 from matplotlib import pyplot as plt
 import seaborn as sns  # noqa: F401
 
