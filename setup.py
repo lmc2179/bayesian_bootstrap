@@ -6,7 +6,7 @@ with open("./requirements.txt") as f:
 setup(
     name = "bayesian_bootstrap",
     packages = ["bayesian_bootstrap"],
-    version = "1.0.6",
+    version = "1.1.0",
     description = "Bayesian Bootstrapping for statistics and regression models",
     author = "Louis Cialdella",
     author_email = "louiscialdella@gmail.com",
