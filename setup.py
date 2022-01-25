@@ -2,7 +2,7 @@ from distutils.core import setup
 setup(
     name = "bayesian_bootstrap",
     packages = ["bayesian_bootstrap"],
-    version = "1.0.5",
+    version = "1.0.6",
     description = "Bayesian Bootstrapping for statistics and regression models",
     author = "Louis Cialdella",
     author_email = "louiscialdella@gmail.com",
@@ -12,7 +12,6 @@ setup(
     classifiers = [
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 2",
         "Intended Audience :: Developers",
         "Intended Audience :: Science/Research",
         "Topic :: Software Development :: Libraries :: Python Modules",
