@@ -115,7 +115,7 @@ Users interested in accessing the base models can do so via the `base_models_` a
 
 Interested in contributing? We'd love to have your help! Please keep the following in mind:
 
-* Bug fixes are welcome! Make sure you reference the issue number that is being resolved, and that all test cases in `tests` pass on both Python 2.7 and 3.4/3.5.
+* Bug fixes are welcome! Make sure you reference the issue number that is being resolved, and that all test cases in `tests` pass.
 
 * New features are welcome as well! Any new features should include docstrings and unit tests in the `tests` directory.
 
