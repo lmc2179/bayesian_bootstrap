@@ -13,7 +13,7 @@ from bayesian_bootstrap import (
 )
 from sklearn.linear_model import LinearRegression
 
-RNG = np.random.default_rng(1337)  # repetable pseudorandomness
+RNG = np.random.default_rng(1337)  # repeatable pseudorandomness
 
 
 class TestMoments(unittest.TestCase):
