@@ -125,6 +125,7 @@ Credit for past contributions:
 
 * [roya0045](https://github.com/roya0045) implemented the original version of the low-memory optimizations.
 * [JulianWgs](https://github.com/JulianWgs) implemented the Bayesian machine learning model using weight distributions instead of resampling and a weighted Pearson correlation coefficient. He also refactored the weighted mean and covariance function to accept weight matrices.
+* [genos](https://github.com/genos) simplified importing and updated the RNG usage to the current numpy standard.
 
 # Further reading
 
