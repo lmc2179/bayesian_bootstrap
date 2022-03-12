@@ -8,8 +8,7 @@ This package is on pypi - you can install it with `pip install bayesian_bootstra
 
 # Overview of the `bayesian_bootstrap` module
 
-The main module in the `bayesian_bootstrap` package is the `bootstrap` module. The `bootstrap` module contains tools 
-for doing approximate bayesian inference using the Bayesian Bootstrap introduced in [Rubin's _The Bayesian Bootstrap_](https://projecteuclid.org/euclid.aos/1176345338).
+This module contains tools for doing approximate bayesian inference using the Bayesian Bootstrap introduced in [Rubin's _The Bayesian Bootstrap_](https://projecteuclid.org/euclid.aos/1176345338).
 
 It contains the following:
 
