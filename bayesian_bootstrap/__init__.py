@@ -275,9 +275,7 @@ def central_credible_interval(samples, alpha=0.05):
 
     Returns: Left and right interval bounds (tuple)
     """
-    tail_size = int(round(len(samples) * (alpha / 2)))
-    samples_sorted = sorted(samples)
-    return samples_sorted[tail_size], samples_sorted[-tail_size - 1]
+    return np.quantile(samples, alpha / 2), np.quantile(samples, 1 - alpha / 2)
 
 
 def highest_density_interval(samples, alpha=0.05):
